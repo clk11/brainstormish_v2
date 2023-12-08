@@ -4,7 +4,7 @@ import { List, ListItem, Box, IconButton, Modal, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import customAxios from '../../../../server/utils/customAxios';
+import customAxios from '../../../../../server/utils/customAxios';
 
 const style = {
 	position: 'absolute',

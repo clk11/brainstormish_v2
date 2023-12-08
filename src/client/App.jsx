@@ -4,10 +4,10 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import customAxios from '../server/utils/customAxios';
 import ProgressBar from './components/Layout/ProgressBar';
-import SecondNavbar from './components/Layout/Navbar/SecondNavbar';
 const Auth = lazy(() => import('./components/Auth/Auth'));
 const NewPost = lazy(() => import('./components/Wall/NewPost'));
-const Navbar = lazy(() => import('./components/Layout/Navbar/Navbar'));
+const ShortNav = lazy(() => import('./components/Layout/Navbar/ShortNav/ShortNav'));
+const LongNav = lazy(() => import('./components/Layout/Navbar/LongNav/LongNav'));
 const Profile = lazy(() => import('./components/Profile/Profile'));
 const Wall = lazy(() => import('./components/Wall/Wall'));
 const Chat = lazy(() => import('./components/Bench/Chat'));
@@ -55,9 +55,9 @@ const App = () => {
 						{isAuth ? (
 							<Fragment>
 								{navbar === false ? (
-									<Navbar toggleMode={toggleMode} />
+									<ShortNav toggleMode={toggleMode} />
 								) : (
-									<SecondNavbar setChange={setChange} change={change} toggleMode={toggleMode} />
+									<LongNav setChange={setChange} change={change} toggleMode={toggleMode} />
 								)}
 								<div className='row'>
 									<Routes>
