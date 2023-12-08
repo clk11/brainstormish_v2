@@ -7,10 +7,10 @@ import ProgressBar from '../Layout/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from '@mui/material';
 import PaginatedList from './PaginatedList';
-const Wall = ({ getPosts, posts, joinDiscussion }) => {
+
+const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(true);
-	const [order] = useState(get_order());
 	const [filteredPosts, setFilteredPosts] = useState([]);
 
 	function get_order() {
@@ -33,12 +33,13 @@ const Wall = ({ getPosts, posts, joinDiscussion }) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await getPosts(order);
-			if (result === 1)
+			const result = await getPosts(get_order());
+			if (result === 1) {
 				setLoading(false);
+			}
 		}
 		fetchData();
-	}, []);
+	}, [change]);
 	const postComponent = (post, key) => (
 		<Grid item key={key}>
 			<Post join={joinDiscussion} post={post} navigate={navigate} />

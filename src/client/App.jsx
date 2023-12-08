@@ -15,6 +15,7 @@ const Chat = lazy(() => import('./components/Bench/Chat'));
 const App = () => {
 	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
 	const [isAuth, setIsAuth] = useState(null);
+	const [change, setChange] = useState(null);
 	const [navbar, setNavbar] = useState(true);
 	const [theme, setTheme] = useState(() => createTheme({
 		palette: {
@@ -56,15 +57,15 @@ const App = () => {
 								{navbar === false ? (
 									<Navbar toggleMode={toggleMode} />
 								) : (
-									<SecondNavbar toggleMode={toggleMode} />
+									<SecondNavbar setChange={setChange} change={change} toggleMode={toggleMode} />
 								)}
 								<div className='row'>
 									<Routes>
 										<Route path='/' element={<Profile />} />
 										<Route path='/wall/profile/:user' element={<Profile />} />
-										<Route path='/wall' element={<Wall />} />
-										<Route path='/wall/:user/posts' element={<Wall />} />
-										<Route path='/wall/:user/posts/joined' element={<Wall />} />
+										<Route path='/wall' element={<Wall change={change} />} />
+										<Route path='/wall/:user/posts' element={<Wall change={change} />} />
+										<Route path='/wall/:user/posts/joined' element={<Wall change={change} />} />
 										<Route path='/createPost' element={<NewPost />} />
 										<Route path='/bench/:postid' element={<Chat setNavbar={setNavbar} />} />
 									</Routes>

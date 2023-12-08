@@ -50,50 +50,18 @@ const Profile = ({ getUser, user }) => {
 							<h5>I became cool on {user.date}</h5>
 						</Grid>
 						<Grid item container justifyContent='center' spacing={2}>
-							{my && (
-								<Grid item>
-									<Button
-										variant='contained'
-										onClick={() => navigate('/createPost')}
-									>
-										Make a post
-									</Button>
-								</Grid>
-							)}
 							<Grid item>
-								<Button
-									onClick={() => navigate(`/wall/${user.username}/posts`)}
-									variant='contained'
-									color='primary'
-								>
-									{!my ? 'Discussions' : 'My discussions'}
-								</Button>
+								{!my && (
+									<Button
+										onClick={() => navigate(`/wall/${user.username}/posts`)}
+										variant='contained'
+										color='primary'
+									>
+										{'Discussions'}
+									</Button>
+								)}
 							</Grid>
 						</Grid>
-						{my && (
-							<Grid item container justifyContent='center' spacing={2}>
-								<Grid item>
-									<Button
-										variant='contained'
-										color='secondary'
-										onClick={() =>
-											navigate(`/wall/${user.username}/posts/joined`)
-										}
-									>
-										Joined discussions
-									</Button>
-								</Grid>
-								<Grid item>
-									<Button
-										variant='contained'
-										color='secondary'
-										onClick={() => navigate('/wall')}
-									>
-										Unjoined discussions
-									</Button>
-								</Grid>
-							</Grid>
-						)}
 					</Grid>
 				</div>
 			)}

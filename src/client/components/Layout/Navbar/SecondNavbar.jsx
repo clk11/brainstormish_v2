@@ -6,15 +6,19 @@ import { connect } from 'react-redux';
 import { authAC } from '../../../../redux/features/';
 import Progress from '../ProgressBar';
 import customAxios from '../../../../server/utils/customAxios'
-const Links = ({ anchorElNav, handleCloseNavMenu, user }) => {
+const Links = ({ anchorElNav, handleCloseNavMenu, user, setChange }) => {
+    const navigate = useNavigate();
     const toWall = () => {
-        window.location.href = '/wall';
+        navigate('/wall');
+        setChange('/wall');
     }
     const toJoined = () => {
-        window.location.href = `/wall/${user.username}/posts/joined`;
+        navigate(`/wall/${user.username}/posts/joined`);
+        setChange(`/wall/${user.username}/posts/joined`);
     }
     const toCreated = () => {
-        window.location.href = `/wall/${user.username}/posts`;
+        navigate(`/wall/${user.username}/posts`);
+        setChange(`/wall/${user.username}/posts`);
     }
     return (
         <>
@@ -120,7 +124,7 @@ const UserMenu = ({ anchorElUser, handleCloseUserMenu, logout, toggleMode, navig
     )
 }
 
-const SecondNavbar = ({ toggleMode, getUser, user }) => {
+const SecondNavbar = ({ toggleMode, getUser, user, setChange }) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [anchorElNav, setAnchorElNav] = useState(null);
@@ -205,10 +209,10 @@ const SecondNavbar = ({ toggleMode, getUser, user }) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Links user={user} anchorElNav={anchorElNav} handleCloseNavMenu={handleCloseNavMenu} />
+                            <Links setChange={setChange} user={user} anchorElNav={anchorElNav} handleCloseNavMenu={handleCloseNavMenu} />
                         </Box>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            <Links user={user} navigate={navigate} />
+                            <Links setChange={setChange} user={user} navigate={navigate} />
                         </Box>
 
                         <Box sx={{ flexGrow: 0 }}>

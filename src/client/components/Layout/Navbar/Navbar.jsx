@@ -27,7 +27,7 @@ const MenuOptions = ({ toggleMode, setOpen, open, navigate }) => {
 		window.location.reload();
 	};
 	return (
-        <List
+		<List
 			sx={{
 				width: '100%',
 				maxWidth: 360,
@@ -46,11 +46,11 @@ const MenuOptions = ({ toggleMode, setOpen, open, navigate }) => {
 			</ListItem>
 			<ListItem>
 				<IconButton
-                    variant="contained"
-                    onClick={() => {
-                        toggleMode();
-                    }}
-                    size="large">
+					variant="contained"
+					onClick={() => {
+						toggleMode();
+					}}
+					size="large">
 					{localStorage.getItem('mode') === 'light' && (
 						<DarkModeIcon />
 					)}
@@ -60,7 +60,7 @@ const MenuOptions = ({ toggleMode, setOpen, open, navigate }) => {
 				</IconButton>
 			</ListItem>
 		</List>
-    );
+	);
 };
 
 const Navbar = ({ toggleMode }) => {
