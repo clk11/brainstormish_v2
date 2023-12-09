@@ -1,61 +1,54 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import { useState } from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import { Button, TextField, Collapse, IconButton, Grid, List, ListItem, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TransitionGroup } from 'react-transition-group';
+import { useState } from 'react';
 
-//secondaryAction - what should be displayed at the end of the ListItem
 const displayItem = ({ item, removeItem }) => {
 	return (
-        <ListItem
+		<ListItem
 			secondaryAction={
 				<IconButton
-                    edge='end'
-                    aria-label='delete'
-                    title='Delete'
-                    onClick={() => removeItem(item)}
-                    size="large">
+					edge='end'
+					aria-label='delete'
+					title='Delete'
+					onClick={() => removeItem(item)}
+					size="large">
 					<DeleteIcon />
 				</IconButton>
 			}
 		>
 			<ListItemText primary={item} />
 		</ListItem>
-    );
+	);
 };
 
 const Tags = ({ setTags, tags }) => {
 	const [tag, setTag] = useState('');
 	const [isBackSpace, setIsBackSpace] = useState(false);
+
 	const handleKeyDown = (event) => {
-		if (event.key === ' ' && event.key !== '-') {
+		if (event.key === ' ') {
 			event.preventDefault();
 			if (tag.charAt(tag.length - 1) !== '-') {
-				setTag((prev) => {
-					const newTag = prev.concat('-');
-					document.getElementById('input').value = newTag;
-					return newTag;
-				});
-			} else event.preventDefault();
-		} else if (event.key === 'Backspace')
+				const newTag = tag.concat('-');
+				setTag(newTag);
+				document.getElementById('input').value = newTag;
+			}
+		} else if (event.key === 'Backspace') {
 			setIsBackSpace(true);
+		}
 	};
 
 	const onTagChange = (e) => {
 		if (isBackSpace) {
 			setTag(e.target.value);
 		} else {
-			if (e.target.value.charAt(e.target.value.length - 1) !== '-')
+			if (e.target.value.charAt(e.target.value.length - 1) !== '-') {
 				setTag(e.target.value);
-			else
+			} else {
 				document.getElementById('input').value = tag;
+			}
 		}
 	}
 
@@ -70,8 +63,12 @@ const Tags = ({ setTags, tags }) => {
 				});
 				setTag('');
 				document.getElementById('input').value = '';
-			} else alert('Tag already in the list !')
-		} else alert('You need to add a tag first !');
+			} else {
+				alert('Tag already in the list !');
+			}
+		} else {
+			alert('You need to add a tag first !');
+		}
 	};
 
 	const removeItem = (item) => {
