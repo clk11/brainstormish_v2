@@ -7,7 +7,6 @@ import ProgressBar from '../Layout/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from '@mui/material';
 import PaginatedList from './PaginatedList';
-
 const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(true);
@@ -50,9 +49,23 @@ const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 		if (posts.length !== 0) {
 			return <PaginatedList data={_posts.map((post, key) => postComponent(post, key))} />
 		}
-		else return (
-			<h1>{'There is nothing here for now :)'}</h1>
-		);
+		else {
+			const containerStyle = {
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			};
+
+			const imageStyle = {
+				maxWidth: '50%',
+				height: 'auto',
+			};
+			return (
+				<div style={containerStyle}>
+					<img src="/noposts.png" alt="Image not available" style={imageStyle} />
+				</div>
+			);
+		}
 	};
 	return (
 		<Container>
