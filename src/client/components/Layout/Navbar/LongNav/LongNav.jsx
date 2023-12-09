@@ -5,7 +5,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar } from 
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { authAC } from '../../../../../redux/features/';    
+import { authAC } from '../../../../../redux/features/';
 import Progress from '../../ProgressBar';
 import customAxios from '../../../../../server/utils/customAxios'
 
@@ -53,7 +53,7 @@ const Navbar = ({ toggleMode, getUser, user, setChange }) => {
     };
 
     return (
-        <AppBar sx={{ marginBottom: '20px', position: 'sticky', top: 0 }} position="static">
+        <AppBar sx={{ marginBottom: '20px', position: 'sticky', top: 0, zIndex: 1 }} position="static">
             {!loading && (
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -95,7 +95,7 @@ const Navbar = ({ toggleMode, getUser, user, setChange }) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <NavigationLinks setChange={setChange} user={user} anchorElNav={anchorElNav} handleCloseNavMenu={handleCloseNavMenu} />
+                            <NavigationLinks navigate={navigate} setChange={setChange} user={user} anchorElNav={anchorElNav} handleCloseNavMenu={handleCloseNavMenu} />
                         </Box>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                             <NavigationLinks setChange={setChange} user={user} navigate={navigate} />

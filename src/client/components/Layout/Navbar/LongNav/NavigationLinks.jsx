@@ -1,19 +1,20 @@
 import { Menu, Button, MenuItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange }) => {
-    const navigate = useNavigate();
+const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange, navigate }) => {
     const toWall = () => {
         navigate('/wall');
         setChange('/wall');
+        handleCloseNavMenu();
     }
     const toJoined = () => {
         navigate(`/wall/${user.username}/posts/joined`);
         setChange(`/wall/${user.username}/posts/joined`);
+        handleCloseNavMenu();
     }
     const toCreated = () => {
         navigate(`/wall/${user.username}/posts`);
         setChange(`/wall/${user.username}/posts`);
+        handleCloseNavMenu();
     }
     return (
         <>
@@ -23,7 +24,7 @@ const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange }) =
                         sx={{ my: 2, color: 'white', display: 'block' }}
                         onClick={toWall}
                     >
-                        {'Wall'}
+                        Not joined
                     </Button>
                     <Button
                         sx={{ my: 2, color: 'white', display: 'block' }}
@@ -35,7 +36,7 @@ const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange }) =
                         sx={{ my: 2, color: 'white', display: 'block' }}
                         onClick={toCreated}
                     >
-                        {'Created'}
+                        Created
                     </Button>
                 </>
             ) : (
@@ -59,7 +60,7 @@ const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange }) =
                         }}
                     >
                         <MenuItem onClick={toWall}>
-                            Wall
+                            Not joined
                         </MenuItem>
                         <MenuItem onClick={toJoined}>
                             Joined

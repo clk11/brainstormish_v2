@@ -6,7 +6,6 @@ import ProgressBar from '../Layout/ProgressBar'
 import ChatUsers from './ChatUsers';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
-import UserMenu from './UserMenu';
 import { useNavigate } from 'react-router-dom';
 
 const ChatComponent = ({ user, socket }) => {
@@ -15,6 +14,7 @@ const ChatComponent = ({ user, socket }) => {
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
     const [right, setRight] = useState(-1);
+    const [empty, setEmpty] = useState(null);
     const [loadMoreVisibility, setLoadMoreVisibility] = useState(false);
     useEffect(() => {
         const fetch = async () => {
@@ -35,6 +35,7 @@ const ChatComponent = ({ user, socket }) => {
                 setMessages([]);
             else {
                 if (mess.length !== 0) {
+                    setEmpty(false);
                     setMessages((prev) => {
                         let new_arr = prev;
                         for (let i = mess.length - 1; i >= 0; i--) {
@@ -43,7 +44,10 @@ const ChatComponent = ({ user, socket }) => {
                         }
                         return new_arr;
                     });
-                    setRight(prev => prev - 4);
+                    setRight(prev => prev - 6);
+                } else {
+                    setLoadMoreVisibility(false);
+                    setEmpty(true);
                 }
             }
         };
@@ -90,6 +94,7 @@ const ChatComponent = ({ user, socket }) => {
             const newMessage = { message: message, username: user.username };
             await socket.emit('send_message', { user, message });
             setMessages(prev => [...prev, newMessage]);
+            setRight(prev => prev - 1);
             document.getElementById('message').value = '';
         }
     }
@@ -102,7 +107,8 @@ const ChatComponent = ({ user, socket }) => {
                     <ChatUsers open={open} setOpen={setOpen} users={users} navigate={navigate} />
                     <Grid container justifyContent={'flex-end'}>
                         <Grid item>
-                            <UserMenu onGetUsers={getUsers} justifyContent={'flex-end'} />
+                            <Button
+                                variant="contained" onClick={getUsers}>Users</Button>
                         </Grid>
                     </Grid>
                     <Divider />
@@ -111,7 +117,7 @@ const ChatComponent = ({ user, socket }) => {
                             <Button onClick={async () => await getMessages()}>Load more</Button>
                         )}
                         <Grid item xs={12} sx={{ overflowY: 'auto' }}>
-                            <ChatMessages setLoadMoreVisibility={setLoadMoreVisibility} messages={messages} navigate={navigate} />
+                            <ChatMessages empty={empty} setLoadMoreVisibility={setLoadMoreVisibility} messages={messages} navigate={navigate} />
                         </Grid>
                     </Grid>
                     <Grid container justifyContent="flex-end" sx={{ padding: 2 }}>

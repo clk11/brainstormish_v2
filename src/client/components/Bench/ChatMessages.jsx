@@ -4,22 +4,21 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { v4 as uuidv4 } from 'uuid';
 
-const ChatMessages = ({ setLoadMoreVisibility, messages, navigate }) => {
+const ChatMessages = ({ setLoadMoreVisibility, messages, navigate, empty }) => {
   const listRef = useRef(null);
   const [blockRepetition, setBlockRepetition] = useState(false);
   const [observerState, setObserverState] = useState(true);
-  useEffect(() => {
-    setLoadMoreVisibility(true);
-  }, [])
   const handleScroll = () => {
     const scrollTop = listRef.current.scrollTop;
-    if (scrollTop === 0) {
-      setLoadMoreVisibility(true);
-      setBlockRepetition(false);
-    } else {
-      if (!blockRepetition) {
-        setLoadMoreVisibility(false);
-        setBlockRepetition(true);
+    if (!empty) {
+      if (scrollTop === 0) {
+        setLoadMoreVisibility(true);
+        setBlockRepetition(false);
+      } else {
+        if (!blockRepetition) {
+          setLoadMoreVisibility(false);
+          setBlockRepetition(true);
+        }
       }
     }
   };

@@ -97,7 +97,7 @@ async function get_post_members(postid) {
 }
 
 async function get_post_messages(postid, right) {
-    const decr = 4;
+    const decr = 6;
     const left = right - decr; // first right is -1 and then we go to the left
     const post_messages = await client.lrange(`post-room:${postid}:messages`, left, right);
     let messages = [];
