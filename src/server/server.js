@@ -18,20 +18,7 @@ initializeSocket(server);
 //Enabling passing data to the body of the req
 
 app.use(express.json({ extended: false }));
-
-
-if (process.env.PRODUCTION === 'yes') {
-    //Production
-    app.use(cors({
-        origin: ['https://brainstormish.site'],
-        credentials: true,
-    }));
-} else {
-    //Development
-    app.use(cors({ origin: true, credentials: true }));
-}
-
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/wall', wallRoutes);
