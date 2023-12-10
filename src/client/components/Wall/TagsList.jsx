@@ -25,40 +25,18 @@ const displayItem = ({ item, removeItem }) => {
 
 const Tags = ({ setTags, tags }) => {
 	const [tag, setTag] = useState('');
-	const [isBackSpace, setIsBackSpace] = useState(false);
-
-	const handleKeyDown = (event) => {
-		if (event.key === ' ') {
-			event.preventDefault();
-			if (tag.charAt(tag.length - 1) !== '-') {
-				const newTag = tag.concat('-');
-				setTag(newTag);
-				document.getElementById('input').value = newTag;
-			}
-		} else if (event.key === 'Backspace') {
-			setIsBackSpace(true);
-		}
-	};
-
-	const onTagChange = (e) => {
-		if (isBackSpace) {
-			setTag(e.target.value);
-		} else {
-			if (e.target.value.charAt(e.target.value.length - 1) !== '-') {
-				setTag(e.target.value);
-			} else {
-				document.getElementById('input').value = tag;
-			}
-		}
-	}
 
 	const addItem = () => {
 		if (tag.trim().length !== 0) {
-			const cleanedTag = tag.endsWith('-') ? tag.slice(0, -1) : tag;
 			if (tags.indexOf(tag) === -1) {
+				const bits = tag.split(' ').filter(x => x !== '' && x !== '-');
+				let polished_tag = '';
+				for (let i = 0; i < bits.length; i++)
+					polished_tag += bits[i] + '-';
+				polished_tag = polished_tag.substring(0, polished_tag.length - 1);
 				setTags(() => {
 					let newArr = [...tags]
-					newArr.push(cleanedTag.toLowerCase());
+					newArr.push(polished_tag.toLowerCase());
 					return newArr;
 				});
 				setTag('');
@@ -104,8 +82,7 @@ const Tags = ({ setTags, tags }) => {
 		<Grid container spacing={0.7} sx={{ marginBottom: '25px' }}>
 			<Grid item>
 				<TextField
-					onKeyDown={handleKeyDown}
-					onChange={onTagChange}
+					onChange={(e) => setTag(e.target.value)}
 					size='small'
 					id='input'
 					required

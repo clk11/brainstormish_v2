@@ -7,7 +7,7 @@
     "client": "vite",
     "server": "cd src/server && nodemon server.js",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
-    "build": "vite build",
+    "build": "export NODE_OPTIONS=--max-old-space-size=512 && vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
