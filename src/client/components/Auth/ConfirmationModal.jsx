@@ -23,11 +23,12 @@ const InputModal = ({ setConfirmation, verifyMailId, userid, confirmationModalOp
 
     return (
         <div>
-            <Modal open={confirmationModalOpen} onClose={handleClose}>
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 300, backgroundColor: 'white', padding: 20 }}>
+            <Modal open={confirmationModalOpen}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 300, backgroundColor: localStorage.getItem('mode') === 'dark' ? 'black' : 'white', padding: 20 }}>
+                    <h4 style={{ textAlign: 'center' }}>Enter the confirmation code you received on the email you provided</h4>
                     <TextField
                         id='input'
-                        label="Enter something"
+                        label="Enter the code"
                         fullWidth
                         value={input}
                         onChange={handleInputChange}

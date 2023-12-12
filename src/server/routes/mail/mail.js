@@ -8,7 +8,6 @@ const { set_mail_id } = setters;
 const { get_mail_id } = getters;
 //
 const router = express.Router();
-
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -16,46 +15,48 @@ const htmlContent = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Brainstormish</title>
+    <title>Confirmation Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         h1 {
-            color: #333333;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
         #uniqueId {
-            margin-top: 20px;
-            font-size: 24px;
-            color: #007bff;
+            font-size: 30px;
+            font-weight: bold;
+            color: black;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Welcome to Brainstormish</h1>
-        <h2>Underneath you'll have the confirmation id that you need to paste in the prompt :)</h2>
+        <h1>Hello!</h1>
+        <h2>Thank you for joining Brainstormish! Please find your confirmation ID below:</h2>
         <h1 id="uniqueId"></h1>
     </div>
 </body>
 
 </html>
+
+
 `;
 
 router.post('/send-mail', async (req, res) => {
@@ -63,14 +64,12 @@ router.post('/send-mail', async (req, res) => {
         const { to, userid } = req.body;
         const id = uuidv4();
         let modifiedHtmlContent = htmlContent.replace('<h1 id="uniqueId"></h1>', `<h1 id="uniqueId">${id}</h1>`);
-        const { success, error } = await sendEmail(to, 'brainstormish identity confirmation', modifiedHtmlContent);
+        const { success } = await sendEmail(to, 'brainstormish identity confirmation', modifiedHtmlContent);
         if (success) {
             await set_mail_id(userid, id);
             res.status(200).json({ message: 'Email sent successfully !' });
         }
     } catch (error) {
-        console.log("send-mail\n" + error);
-
         res.status(400).send({ err: 'Something went wrong !' });
     }
 });
@@ -85,7 +84,6 @@ router.get('/verify-id', async (req, res) => {
         }
         else return res.status(400).send({ err: 'The code is wrong . Trying again will send another code .' });
     } catch (error) {
-        console.log("verify-id\n" + error);
         res.status(400).send({ err: 'Something went wrong !' });
     }
 });

@@ -1,10 +1,11 @@
 import nodemailer from 'nodemailer';
-
+import dotenv from 'dotenv';
+dotenv.config();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'trasca.robert03@gmail.com',
-        pass: 'dwmv qghg vduk blxc',
+        user: process.env.MAIL_USR,
+        pass: process.env.MAIL_PASS,
     },
 });
 
@@ -14,7 +15,7 @@ const sendEmail = async (to, subject, htmlContent) => {
             from: 'brainstormish.site',
             to,
             subject,
-            html: htmlContent || 'Default message',
+            html: htmlContent,
         };
 
         const info = await transporter.sendMail(mailOptions);
