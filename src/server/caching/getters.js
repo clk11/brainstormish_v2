@@ -126,6 +126,10 @@ async function get_date() {
     return formattedDate;
 }
 
+async function get_mail_id(userid) {
+    return await client.get(userid);
+}
+
 export const getters = {
     get_user_posts_created,
     get_user_posts_joined,
@@ -135,5 +139,6 @@ export const getters = {
     get_user_private_profile,
     get_post_messages,
     get_membership_status,
-    get_date
+    get_date,
+    get_mail_id
 }

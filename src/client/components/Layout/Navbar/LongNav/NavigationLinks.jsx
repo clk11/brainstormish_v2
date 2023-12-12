@@ -4,23 +4,14 @@ const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange, nav
     const toWall = () => {
         navigate('/wall');
         setChange('/wall');
-        setTimeout(() => {
-            handleCloseNavMenu();
-        }, 100);
     }
     const toJoined = () => {
         navigate(`/wall/${user.username}/posts/joined`);
         setChange(`/wall/${user.username}/posts/joined`);
-        setTimeout(() => {
-            handleCloseNavMenu();
-        }, 100);
     }
     const toCreated = () => {
         navigate(`/wall/${user.username}/posts`);
         setChange(`/wall/${user.username}/posts`);
-        setTimeout(() => {
-            handleCloseNavMenu();
-        }, 100);
     }
     return (
         <>

@@ -19,20 +19,10 @@ const NavigationUserMenu = ({ anchorElUser, handleCloseUserMenu, logout, toggleM
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
         >
-            <MenuItem onClick={() => {
-                navigate('/');
-                setTimeout(() => {
-                    handleCloseUserMenu();
-                }, 100);
-            }}>
+            <MenuItem onClick={() => navigate('/')}>
                 Profile
             </MenuItem>
-            <MenuItem onClick={() => {
-                navigate('/createPost');
-                setTimeout(() => {
-                    handleCloseUserMenu();
-                }, 100);
-            }}
+            <MenuItem onClick={() => navigate('/createPost')}
             >
                 Create post
             </MenuItem>

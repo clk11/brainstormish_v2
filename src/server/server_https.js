@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.js';
 import wallRoutes from './routes/wall.js';
 import benchRoutes from './routes/bench.js';
+import mailRoutes from './routes/mail/mail.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/wall', wallRoutes);
 app.use('/bench', benchRoutes);
+app.use('/mail', mailRoutes);
 
 // Start the server
 httpsServer.listen(serverPort, () => {

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField, Box, Typography, Container, Paper, Link, Grid } from '@mui/material'
 import { authAC } from "../../../redux/features";
 import { connect } from "react-redux";
 import Snack from "../Layout/SnackBar/Snack";
-const Auth = ({ changeClient, clientLogin, login, register, errors }) => {
+import ConfirmationModal from './ConfirmationModal.jsx';
+import { v4 as uuidv4 } from 'uuid';
+
+const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, validateCredentials, sendConfirmationMail, errors }) => {
+  const [confirmation, setConfirmation] = useState(null);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [userid, setUserid] = useState('');
+  //
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [user, setUser] = useState({
@@ -22,21 +29,44 @@ const Auth = ({ changeClient, clientLogin, login, register, errors }) => {
     });
   };
 
-  const onSubmit = async () => {
-    if (clientLogin)
-      setOpen(!(await login(user)));
-    else {
-      const result = await register(user);
-      setAlertMessage('Registered successfully !');
-      setOpen(true);
-      if (result === 1) {
+  useEffect(() => {
+    const exec = async () => {
+      if (confirmation) {
+        const res = await register({ userid, user });
+        setAlertMessage('Registered successfully !');
+        setOpen(true);
         clearInputs();
         changeClient();
+        setConfirmation(null);
+      } else {
+        if (user.username.trim().length !== 0) setOpen(true);
+        setConfirmation(null);
+      }
+    }
+    if (confirmation !== null)
+      exec();
+  }, [confirmation]);
+
+  const onSubmit = async () => {
+    if (!open) {
+      if (clientLogin)
+        setOpen(!(await login(user)));
+      else {
+        const userid = uuidv4();
+        const result = await validateCredentials(user);
+        if (result === 1) {
+          const res = await sendConfirmationMail({ userid, to: user.email });
+          if (res === 1) {
+            setUserid(userid);
+            setConfirmationModalOpen(true);
+          } else setOpen(true);
+        } else setOpen(true);
       }
     }
   };
   return (
     <Container component="main" maxWidth="xs">
+      <ConfirmationModal register={register} setConfirmation={setConfirmation} userid={userid} verifyMailId={verifyMailId} confirmationModalOpen={confirmationModalOpen} setConfirmationModalOpen={setConfirmationModalOpen} />
       <Snack alertMessage={alertMessage} open={open} setOpen={setOpen} errors={errors} />
       <Box
         sx={{
@@ -136,6 +166,15 @@ const actionCreators = (dispatch) => {
     register: (user) => {
       return authAC.Register(dispatch, user);
     },
+    validateCredentials: (user) => {
+      return authAC.ValidateCredentials(dispatch, user);
+    },
+    sendConfirmationMail: (data) => {
+      return authAC.SendConfirmationMail(dispatch, data);
+    },
+    verifyMailId: (data) => {
+      return authAC.VerifyMailId(dispatch, data);
+    }
   };
 };
 export default connect(stateProps, actionCreators)(Auth);

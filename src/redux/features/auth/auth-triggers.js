@@ -7,6 +7,12 @@ import {
 	changeClient,
 	getUser,
 	getUserFailed,
+	sendConfirmationMail,
+	sendConfirmationMailFailed,
+	validateCredentials,
+	validateCredentialsFailed,
+	verifyMailId,
+	verifyMailIdFailed
 } from './auth-slice';
 
 export const GetUser = async (dispatch) => {
@@ -27,6 +33,21 @@ export const ChangeClient = (dispatch) => {
 	};
 };
 
+export const ValidateCredentials = async (dispatch, user) => {
+	try {
+		const queryParams = Object.keys(user)
+			.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(user[key])}`)
+			.join('&');
+		const url = `/auth/validate_credentials?${queryParams}`;
+		await customAxios.get(url);
+		dispatch(validateCredentials());
+		return 1;
+	} catch (error) {
+		dispatch(validateCredentialsFailed(error.response.data.err));
+		return 0;
+	}
+};
+
 export const Register = async (dispatch, user) => {
 	try {
 		await customAxios.post('/auth/register', user);
@@ -36,7 +57,8 @@ export const Register = async (dispatch, user) => {
 		dispatch(registerFailed(error.response.data.err));
 		return 0;
 	}
-};
+}
+
 
 export const Login = async (dispatch, user) => {
 	try {
@@ -49,3 +71,29 @@ export const Login = async (dispatch, user) => {
 		return 0;
 	}
 };
+
+export const SendConfirmationMail = async (dispatch, data) => {
+	try {
+		await customAxios.post('/mail/send-mail', data);
+		dispatch(sendConfirmationMail());
+		return 1;
+	} catch (error) {
+		dispatch(sendConfirmationMailFailed(error.response.data.err))
+		return 0;
+	}
+}
+
+export const VerifyMailId = async (dispatch, data) => {
+	try {
+		const queryParams = Object.keys(data)
+			.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+			.join('&');
+		const url = `/mail/verify-id?${queryParams}`;
+		await customAxios.get(url);
+		dispatch(verifyMailId());
+		return 1;
+	} catch (error) {
+		dispatch(verifyMailIdFailed(error.response.data.err));
+		return 0;
+	}
+}

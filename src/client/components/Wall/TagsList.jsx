@@ -23,24 +23,34 @@ const displayItem = ({ item, removeItem }) => {
 	);
 };
 
+
 const Tags = ({ setTags, tags }) => {
 	const [tag, setTag] = useState('');
-
+	const check_tag = (tag) => {
+		var allowedRegex = /^[a-zA-Z0-9\s.#+]+$/;
+		if (!allowedRegex.test(tag)) {
+			return false;
+		}
+		return true;
+	}
 	const addItem = () => {
 		if (tag.trim().length !== 0) {
 			if (tags.indexOf(tag) === -1) {
-				const bits = tag.split(' ').filter(x => x !== '' && x !== '-');
-				let polished_tag = '';
-				for (let i = 0; i < bits.length; i++)
-					polished_tag += bits[i] + '-';
-				polished_tag = polished_tag.substring(0, polished_tag.length - 1);
-				setTags(() => {
-					let newArr = [...tags]
-					newArr.push(polished_tag.toLowerCase());
-					return newArr;
-				});
-				setTag('');
-				document.getElementById('input').value = '';
+				if (check_tag(tag)) {
+					const bits = tag.split(' ').filter(x => x !== '');
+					let polished_tag = '';
+					for (let i = 0; i < bits.length; i++)
+						polished_tag += bits[i] + '-';
+					polished_tag = polished_tag.substring(0, polished_tag.length - 1);
+					setTags(() => {
+						let newArr = [...tags];
+						newArr.push(polished_tag.toLowerCase());
+						return newArr;
+					});
+					setTag('');
+					document.getElementById('input').value = '';
+				} else
+					alert("Illegal characters detected! Only letters (upper and lower) and spaces are allowed.");
 			} else {
 				alert('Tag already in the list !');
 			}

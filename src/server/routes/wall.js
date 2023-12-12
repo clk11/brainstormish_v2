@@ -70,7 +70,7 @@ router.post(
 			} catch (err) {
 				res.status(500).send({ err: 'Server error .' });
 			}
-		} else return res.status(500).send({ err: err.array() });
+		} else return res.status(500).send({ err: err.array().map(x => x.msg)  });
 	}
 );
 

@@ -80,6 +80,10 @@ async function add_message(username, postid, message) {
     await client.incr('message-id');
 }
 
+async function set_mail_id(userid, id) {
+    await client.setex(userid, 300, id);
+}
+
 export const setters = {
     set_user_profile,
     set_user_private_profile,
@@ -88,5 +92,6 @@ export const setters = {
     add_message,
     disconnect_user,
     create_connection,
-    refresh_connection
+    refresh_connection,
+    set_mail_id
 }

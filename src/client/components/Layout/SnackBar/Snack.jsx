@@ -12,14 +12,14 @@ const Snack = ({ alertMessage, errors, open, setOpen }) => {
         open={open}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         autoHideDuration={2000} onClose={() => {
-         setOpen(false);
+          setOpen(false);
         }}>
         <Alert severity={errors === null ? 'success' : 'error'} sx={{ width: '100%' }}>
           {errors !== null && Array.isArray(errors) ?
             <Grid container direction={'column'}>
               {errors.map((item, index) => (
                 <Grid item key={index}>
-                  {item.msg}
+                  {item}
                 </Grid>
               ))}
             </Grid>

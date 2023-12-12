@@ -33,7 +33,26 @@ const authSlice = createSlice({
 		loginFailed(state, action) {
 			state.errors = action.payload;
 			state.user = null;
+		},
+		sendConfirmationMail(state) {
+			state.errors = null;
+		},
+		sendConfirmationMailFailed(state, action) {
+			state.errors = action.payload;
+		},
+		verifyMailId(state) {
+			state.errors = null;
+		},
+		verifyMailIdFailed(state, action) {
+			state.errors = action.payload;
+		},
+		validateCredentials(state) {
+			state.errors = null;
+		},
+		validateCredentialsFailed(state, action) {
+			state.errors = action.payload;
 		}
+
 	},
 });
 
@@ -45,5 +64,11 @@ export const {
 	loginFailed,
 	getUser,
 	getUserFailed,
+	sendConfirmationMail,
+	sendConfirmationMailFailed,
+	verifyMailId,
+	verifyMailIdFailed,
+	validateCredentials,
+	validateCredentialsFailed
 } = authSlice.actions;
 export default authSlice.reducer;
