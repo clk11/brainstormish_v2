@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authAC, wallAC } from '../../../redux/features/';
 
-const Profile = ({ getUser, user }) => {
+const Profile = ({ getUser, user, change }) => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(true);
 	const [my, setMy] = useState(true);
@@ -30,7 +30,7 @@ const Profile = ({ getUser, user }) => {
 		return () => {
 			isMounted = false;
 		};
-	}, []);
+	}, [change]);
 
 	return (
 		<div style={{ fontSize: '130%' }}>

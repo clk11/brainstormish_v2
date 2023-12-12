@@ -1,12 +1,12 @@
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { DarkMode as DarkModeIcon, LightMode as LightModeIcon } from '@mui/icons-material';
 
-const NavigationUserMenu = ({ anchorElUser, handleCloseUserMenu, logout, toggleMode, navigate }) => {
+const NavigationUserMenu = ({ anchorElUser, handleCloseUserMenu, logout, toggleMode, navigate, setChange }) => {
     return (
         <Menu
+            anchorEl={anchorElUser}
             sx={{ mt: '45px' }}
             id="menu-appbar"
-            anchorEl={anchorElUser}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -19,7 +19,7 @@ const NavigationUserMenu = ({ anchorElUser, handleCloseUserMenu, logout, toggleM
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
         >
-            <MenuItem onClick={() => navigate('/')}>
+            <MenuItem onClick={() => { navigate('/'); setChange('/'); }}>
                 Profile
             </MenuItem>
             <MenuItem onClick={() => navigate('/createPost')}

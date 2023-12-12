@@ -39,8 +39,8 @@ const NavigationLinks = ({ anchorElNav, handleCloseNavMenu, user, setChange, nav
             ) : (
                 <>
                     <Menu
-                        id="menu-appbar"
                         anchorEl={anchorElNav}
+                        id="menu-appbar"
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',

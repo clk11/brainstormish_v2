@@ -62,7 +62,7 @@ const App = () => {
 								<div className='row'>
 									<Routes>
 										<Route path='/' element={<Profile />} />
-										<Route path='/wall/profile/:user' element={<Profile />} />
+										<Route path='/wall/profile/:user' element={<Profile change={change} />} />
 										<Route path='/wall' element={<Wall change={change} />} />
 										<Route path='/wall/:user/posts' element={<Wall change={change} />} />
 										<Route path='/wall/:user/posts/joined' element={<Wall change={change} />} />
