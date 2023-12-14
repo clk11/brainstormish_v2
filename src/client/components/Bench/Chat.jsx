@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const Chat = ({ user, getUser, membership, getMembership }) => {
-  const { postid } = useParams();
+  const { title, postid } = useParams();
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
@@ -43,7 +43,7 @@ const Chat = ({ user, getUser, membership, getMembership }) => {
         loading || !user ? (
           <ProgressBar />
         ) : (
-          <ChatComponent socket={socket} user={{ room: postid, username: user.username }} />
+          <ChatComponent socket={socket} user={{ title, room: postid, username: user.username }} />
         )
       )}
       {membership === false && (

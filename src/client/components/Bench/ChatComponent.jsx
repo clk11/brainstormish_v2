@@ -99,10 +99,11 @@ const ChatComponent = ({ user, socket }) => {
         <Container maxWidth="md" sx={{ height: '80vh', display: 'flex', flexDirection: 'column' }}>
             <Paper elevation={5} sx={{ borderStyle: 'solid', borderColor: 'Grey', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <ChatUsers open={open} setOpen={setOpen} users={users} navigate={navigate} />
-                <Grid container justifyContent={'flex-end'}>
+                <Grid container justifyContent={'flex-end'} spacing={2}>
                     <Grid item>
                         <Button
-                            variant="contained" onClick={getUsers}>Users</Button>
+                            variant="contained" onClick={getUsers}>PARTICIPANTS
+                        </Button>
                     </Grid>
                 </Grid>
                 <Divider />

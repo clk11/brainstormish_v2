@@ -56,9 +56,9 @@ const Navbar = ({ toggleMode, getUser, setChange, user }) => {
 							<MenuOptions
 								setChange={setChange}
 								getUser={getUser}
-								user={user} toggleMode={toggleMode}
+								user={user}
+								toggleMode={toggleMode}
 								setOpen={setOpen}
-								open={open}
 								navigate={navigate} />
 						</Box>
 					</Modal>

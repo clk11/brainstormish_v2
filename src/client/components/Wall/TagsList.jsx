@@ -78,13 +78,13 @@ const Tags = ({ setTags, tags }) => {
 				});
 			}}
 		>
-			CLEAR
+			CLEAR TAGS
 		</Button>
 	);
 
 	const addItemButton = (
 		<Button variant='contained' onClick={addItem}>
-			ADD
+			ADD TAG
 		</Button>
 	);
 

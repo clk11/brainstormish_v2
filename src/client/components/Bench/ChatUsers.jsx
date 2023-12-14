@@ -27,9 +27,9 @@ const ChatUsers = ({ users, open, setOpen, navigate }) => {
             >
                 <Box sx={style}>
                     <Typography variant="h6" component="h2">
-                        Chat users
+                        Chat participants
                     </Typography>
-                    <List sx={{ height: '20rem', overflow: 'auto' }}>
+                    <List sx={{ height: 'auto', overflow: 'auto' }}>
                         {users.map(({ username, status }) => (
                             <ListItem key={username} divider>
                                 <Grid container spacing={2}>

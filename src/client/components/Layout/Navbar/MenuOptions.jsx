@@ -1,9 +1,9 @@
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import customAxios from '../../../../server/utils/customAxios.js'
-import { List, ListItem, IconButton, Button } from '@mui/material';
+import { List, ListItem, Grid, IconButton, Button } from '@mui/material';
 
-const MenuOptions = ({ setOpen, open, user, setChange, navigate, toggleMode }) => {
+const MenuOptions = ({ setOpen, user, setChange, navigate, toggleMode }) => {
     const logout = async () => {
         await customAxios.get('/auth/clear_session');
         navigate('/');
@@ -13,73 +13,81 @@ const MenuOptions = ({ setOpen, open, user, setChange, navigate, toggleMode }) =
     const toWall = () => {
         navigate('/wall');
         setChange('/wall');
-        setOpen(!open);
+        setOpen(false);
     }
     const toJoined = () => {
         navigate(`/wall/${user.username}/posts/joined`);
         setChange(`/wall/${user.username}/posts/joined`);
-        setOpen(!open);
+        setOpen(false);
     }
     const toCreated = () => {
         navigate(`/wall/${user.username}/posts`);
         setChange(`/wall/${user.username}/posts`);
-        setOpen(!open);
+        setOpen(false);
+    }
+    const toCreate = () => {
+        navigate('/createPost');
+        setOpen(false);
     }
     const toProfile = () => {
         navigate('/');
-        setOpen(!open);
+        setOpen(false);
     }
     return (
-        <>
-            <List
-                sx={{
-                    width: '100%',
-                    maxWidth: 360,
-                    bgcolor: 'background.paper',
-                }}
-            >
-                <ListItem>
-                    <Button onClick={toProfile}>
-                        Profile
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button onClick={toWall}>
-                        Wall
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button onClick={toJoined}>
-                        Joined
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button onClick={toCreated}>
-                        Created
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button onClick={logout}>
-                        Log out
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <IconButton
-                        variant="contained"
-                        onClick={() => {
-                            toggleMode();
-                        }}
-                        size="large">
-                        {localStorage.getItem('mode') === 'light' && (
-                            <DarkModeIcon />
-                        )}
-                        {localStorage.getItem('mode') === 'dark' && (
-                            <LightModeIcon />
-                        )}
-                    </IconButton>
-                </ListItem>
-            </List>
-        </>
+        <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1.5}
+        >
+            <Grid item>
+                <Button onClick={toProfile}>
+                    Profile
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button onClick={toCreate}>
+                    Create post
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button onClick={toWall}>
+                    Unjoined posts
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button onClick={toJoined}>
+                    Joined posts
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button onClick={toCreated}>
+                    Created posts
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button onClick={logout}>
+                    Log out
+                </Button>
+            </Grid>
+            <Grid item>
+                <IconButton
+                    variant="contained"
+                    onClick={() => {
+                        toggleMode();
+                    }}
+                    size="large"
+                >
+                    {localStorage.getItem('mode') === 'light' && (
+                        <DarkModeIcon />
+                    )}
+                    {localStorage.getItem('mode') === 'dark' && (
+                        <LightModeIcon />
+                    )}
+                </IconButton>
+            </Grid>
+        </Grid>
     );
 };
 

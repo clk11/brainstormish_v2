@@ -61,7 +61,7 @@ const App = () => {
 										<Route path='/wall/:user/posts' element={<Wall change={change} />} />
 										<Route path='/wall/:user/posts/joined' element={<Wall change={change} />} />
 										<Route path='/createPost' element={<NewPost />} />
-										<Route path='/bench/:postid' element={<Chat />} />
+										<Route path='/bench/:title/:postid' element={<Chat />} />
 									</Routes>
 								</div>
 							</Fragment>
