@@ -3,7 +3,6 @@ import { List, ListItem, Typography, Grid } from '@mui/material'
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { v4 as uuidv4 } from 'uuid';
-
 const ChatMessages = ({ setLoadMoreVisibility, messages, navigate, empty }) => {
   const listRef = useRef(null);
   const [blockRepetition, setBlockRepetition] = useState(false);

@@ -4,7 +4,7 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 
-const Search = ({ posts, setFilteredPosts }) => {
+const Search = ({ setPage, posts, setFilteredPosts }) => {
 	const [input, setInput] = useState('');
 
 	const str_tags = (str) => {
@@ -44,6 +44,7 @@ const Search = ({ posts, setFilteredPosts }) => {
 	}
 
 	const onSearchClick = (e) => {
+		setPage(1);
 		e.preventDefault();
 		setFilteredPosts([]);
 		if (input.length !== 0) {

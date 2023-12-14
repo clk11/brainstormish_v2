@@ -6,8 +6,7 @@ import customAxios from '../server/utils/customAxios';
 import ProgressBar from './components/Layout/ProgressBar';
 const Auth = lazy(() => import('./components/Auth/Auth'));
 const NewPost = lazy(() => import('./components/Wall/NewPost'));
-const ShortNav = lazy(() => import('./components/Layout/Navbar/ShortNav/ShortNav'));
-const LongNav = lazy(() => import('./components/Layout/Navbar/LongNav/LongNav'));
+const Navbar = lazy(() => import('./components/Layout/Navbar/Navbar'));
 const Profile = lazy(() => import('./components/Profile/Profile'));
 const Wall = lazy(() => import('./components/Wall/Wall'));
 const Chat = lazy(() => import('./components/Bench/Chat'));
@@ -16,7 +15,6 @@ const App = () => {
 	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
 	const [isAuth, setIsAuth] = useState(null);
 	const [change, setChange] = useState(null);
-	const [navbar, setNavbar] = useState(true);
 	const [theme, setTheme] = useState(() => createTheme({
 		palette: {
 			mode: isDarkMode ? 'dark' : 'light',
@@ -54,11 +52,7 @@ const App = () => {
 					<Suspense fallback={<ProgressBar />}>
 						{isAuth ? (
 							<Fragment>
-								{navbar === false ? (
-									<ShortNav toggleMode={toggleMode} />
-								) : (
-									<LongNav setChange={setChange} change={change} toggleMode={toggleMode} />
-								)}
+								<Navbar setChange={setChange} toggleMode={toggleMode} />
 								<div className='row'>
 									<Routes>
 										<Route path='/' element={<Profile />} />
@@ -67,7 +61,7 @@ const App = () => {
 										<Route path='/wall/:user/posts' element={<Wall change={change} />} />
 										<Route path='/wall/:user/posts/joined' element={<Wall change={change} />} />
 										<Route path='/createPost' element={<NewPost />} />
-										<Route path='/bench/:postid' element={<Chat setNavbar={setNavbar} />} />
+										<Route path='/bench/:postid' element={<Chat />} />
 									</Routes>
 								</div>
 							</Fragment>

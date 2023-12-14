@@ -9,6 +9,7 @@ import { Container, Grid } from '@mui/material';
 import PaginatedList from './PaginatedList';
 const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 	const navigate = useNavigate();
+	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const [filteredPosts, setFilteredPosts] = useState([]);
 
@@ -46,9 +47,8 @@ const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 	);
 
 	const displayPosts = (_posts) => {
-		if (posts.length !== 0) {
-			return <PaginatedList data={_posts.map((post, key) => postComponent(post, key))} />
-		}
+		if (posts.length !== 0)
+			return <PaginatedList setPage={setPage} page={page} data={_posts.map((post, key) => postComponent(post, key))} />
 		else {
 			const containerStyle = {
 				display: 'flex',
@@ -79,7 +79,7 @@ const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 					alignItems='center'
 				>
 					<Grid item>
-						<Search posts={posts} setFilteredPosts={setFilteredPosts} />
+						<Search setPage={setPage} posts={posts} setFilteredPosts={setFilteredPosts} />
 					</Grid>
 					<Grid item>
 						{filteredPosts.length === 0 ? displayPosts(posts) : displayPosts(filteredPosts)}

@@ -6,13 +6,12 @@ import ChatComponent from './ChatComponent';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-const Chat = ({ user, getUser, membership, getMembership, setNavbar }) => {
+const Chat = ({ user, getUser, membership, getMembership }) => {
   const { postid } = useParams();
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    setNavbar(false);
     const fetch = async () => {
       await getMembership({ room: postid });
     }
@@ -23,7 +22,6 @@ const Chat = ({ user, getUser, membership, getMembership, setNavbar }) => {
     const socketInstance = io(import.meta.env.VITE_API_URL);
     setSocket(socketInstance);
     return () => {
-      setNavbar(true);
       socketInstance.disconnect();
     };
   }, []);

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Pagination } from '@mui/material';
 
-const PaginatedList = ({ data }) => {
-    const [page, setPage] = useState(1);
+const PaginatedList = ({ data,page,setPage }) => {
     const itemsPerPage = 4;
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
