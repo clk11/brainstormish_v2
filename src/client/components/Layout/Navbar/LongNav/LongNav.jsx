@@ -58,6 +58,10 @@ const Navbar = ({ toggleMode, getUser, user, setChange }) => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <img
+                            onClick={() => {
+                                navigate(`/wall/${user.username}/posts/joined`);
+                                setChange(`/wall/${user.username}/posts/joined`);
+                            }}
                             type="image/png"
                             src="/icon.png"
                             alt="Logo"
@@ -109,7 +113,7 @@ const Navbar = ({ toggleMode, getUser, user, setChange }) => {
                             >
                                 {formatUsername(user.username)}
                             </Avatar>
-                            <NavigationUserMenu navigate={navigate} toggleMode={toggleMode} anchorElUser={anchorElUser} handleCloseUserMenu={handleCloseUserMenu} logout={logout} />
+                            <NavigationUserMenu setChange={setChange} navigate={navigate} toggleMode={toggleMode} anchorElUser={anchorElUser} handleCloseUserMenu={handleCloseUserMenu} logout={logout} />
                         </Box>
                     </Toolbar>
                 </Container>

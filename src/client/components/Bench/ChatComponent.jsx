@@ -12,7 +12,7 @@ const ChatComponent = ({ user, socket }) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [users, setUsers] = useState([]);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(null);
     const [right, setRight] = useState(-1);
     const [empty, setEmpty] = useState(null);
     const [loadMoreVisibility, setLoadMoreVisibility] = useState(false);
@@ -20,6 +20,7 @@ const ChatComponent = ({ user, socket }) => {
         const fetch = async () => {
             await joinRoom();
             await getMessages();
+
         }
         fetch();
         const handleReceivedMessage = obj => {
@@ -31,26 +32,23 @@ const ChatComponent = ({ user, socket }) => {
         };
 
         const handleGettingMessages = mess => {
-            if (mess == null)
-                setMessages([]);
-            else {
-                if (mess.length !== 0) {
-                    setEmpty(false);
-                    setMessages((prev) => {
-                        let new_arr = prev;
-                        for (let i = mess.length - 1; i >= 0; i--) {
-                            if (!new_arr.some(x => x.id === mess[i].id))
-                                new_arr.unshift(mess[i]);
-                        }
-                        return new_arr;
-                    });
-                    setRight(prev => prev - 6);
-                } else {
-                    setLoadMoreVisibility(false);
-                    setEmpty(true);
-                }
-            }
-        };
+            console.log(mess);
+            if (mess.length === 0) {
+                setLoadMoreVisibility(false);
+                setEmpty(true);
+            } else {
+                setEmpty(false);
+                setMessages((prev) => {
+                    let new_arr = prev === null ? [] : prev;
+                    for (let i = mess.length - 1; i >= 0; i--) {
+                        if (!new_arr.some(x => x.id === mess[i].id))
+                            new_arr.unshift(mess[i]);
+                    }
+                    return new_arr;
+                });
+                setRight(prev => prev - 6);
+            };
+        }
 
         socket.on('received_message', handleReceivedMessage);
         socket.on('getting_users', handleGettingUsers);

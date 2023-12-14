@@ -49,12 +49,10 @@ const Chat = ({ user, getUser, membership, getMembership, setNavbar }) => {
         )
       )}
       {membership === false && (
-        <div>
+        <div style={{ textAlign: 'center' }}>
           <h1>You haven't joined a room with this id !</h1>
+          <h1 style={{ transform: 'rotate(90deg)' }}>{":'("}</h1>
         </div>
-      )}
-      {!membership && (
-        <ProgressBar />
       )}
     </div>
 
