@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Modal, TextField } from '@mui/material'
-const InputModal = ({ setConfirmation, verifyMailId, userid, confirmationModalOpen, setConfirmationModalOpen }) => {
+import { Button, Modal, TextField, Grid } from '@mui/material'
+const InputModal = ({ user, register, setAlertMessage, setOpen, clearInputs, changeClient, verifyMailId, userid, confirmationModalOpen, setConfirmationModalOpen }) => {
     const [input, setInput] = useState('');
     const handleClose = () => {
         setConfirmationModalOpen(false);
@@ -11,14 +11,19 @@ const InputModal = ({ setConfirmation, verifyMailId, userid, confirmationModalOp
     };
 
     const handleInputSubmit = async () => {
-        const result = await verifyMailId({ userid, input });
-        if (result === 1)
-            setConfirmation(true);
-        else
-            setConfirmation(false);
-        setInput('');
-        document.getElementById('input').value = '';
-        handleClose();
+        if (input.trim().length > 0) {
+            const result = await verifyMailId({ userid, input });
+            if (result === 1) {
+                await register({ userid, user });
+                setAlertMessage('Registered successfully !');
+                clearInputs();
+                changeClient();
+            }
+            setOpen(true);
+            setInput('');
+            document.getElementById('input').value = '';
+            handleClose();
+        } else alert('You need to enter something !');
     };
 
     return (
@@ -33,9 +38,18 @@ const InputModal = ({ setConfirmation, verifyMailId, userid, confirmationModalOp
                         value={input}
                         onChange={handleInputChange}
                     />
-                    <Button variant="contained" color="primary" onClick={handleInputSubmit} style={{ marginTop: 10 }}>
-                        Submit
-                    </Button>
+                    <Grid container spacing={1}>
+                        <Grid item xs={8}>
+                            <Button fullWidth variant="contained" color="primary" onClick={handleInputSubmit} style={{ marginTop: 10 }}>
+                                Submit
+                            </Button>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Button fullWidth variant="contained" color="error" onClick={handleClose} style={{ marginTop: 10 }}>
+                                Close
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </div>
             </Modal>
         </div>

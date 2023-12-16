@@ -29,24 +29,6 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     });
   };
 
-  useEffect(() => {
-    const exec = async () => {
-      if (confirmation) {
-        const res = await register({ userid, user });
-        setAlertMessage('Registered successfully !');
-        setOpen(true);
-        clearInputs();
-        changeClient();
-        setConfirmation(null);
-      } else {
-        if (user.username.trim().length !== 0) setOpen(true);
-        setConfirmation(null);
-      }
-    }
-    if (confirmation !== null)
-      exec();
-  }, [confirmation]);
-
   const onSubmit = async () => {
     if (!open) {
       if (clientLogin)
@@ -66,7 +48,17 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
   };
   return (
     <Container component="main" maxWidth="xs">
-      <ConfirmationModal register={register} setConfirmation={setConfirmation} userid={userid} verifyMailId={verifyMailId} confirmationModalOpen={confirmationModalOpen} setConfirmationModalOpen={setConfirmationModalOpen} />
+      <ConfirmationModal
+        user={user}
+        setAlertMessage={setAlertMessage}
+        setOpen={setOpen}
+        clearInputs={clearInputs}
+        changeClient={changeClient}
+        register={register}
+        userid={userid}
+        verifyMailId={verifyMailId}
+        confirmationModalOpen={confirmationModalOpen}
+        setConfirmationModalOpen={setConfirmationModalOpen} />
       <Snack alertMessage={alertMessage} open={open} setOpen={setOpen} errors={errors} />
       <Box
         sx={{
