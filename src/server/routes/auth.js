@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import config from 'config';
-import { check, validationResult, query } from 'express-validator';
+import { check, validationResult } from 'express-validator';
 import auth from '../middlewares/auth.js';
 import db from '../config/db.js';
 import { middlewares, cache_functions } from '../caching/caching.js';
@@ -89,20 +89,20 @@ router.post(
 // @desc => Validate the credentials
 // @access => Public
 
-router.get(
+router.post(
 	'/validate_credentials',
 	[
-		query('username')
+		check('username')
 			.not()
 			.isEmpty()
 			.withMessage("Username shouldn't be empty !"),
-		query('password')
+		check('password')
 			.isLength({ min: 6, max: 15 })
 			.withMessage('You should add a password between 6 and 15 chars !'),
-		query('email').isEmail().withMessage('You need to enter a valid email !'),
-		query('rpassword')
+		check('email').isEmail().withMessage('You need to enter a valid email !'),
+		check('rpassword')
 			.custom((value, { req }) => {
-				if (value !== req.query.password) {
+				if (value !== req.body.password) {
 					throw new Error('Your passwords do not match.');
 				}
 				return true;
@@ -111,7 +111,7 @@ router.get(
 	async (req, res) => {
 		let err = validationResult(req);
 		if (err.isEmpty()) {
-			const { username, email } = req.query;
+			const { username, email } = req.body;;
 			try {
 				err = [];
 				let record = await db.query(
@@ -136,6 +136,50 @@ router.get(
 			res.status(500).send({ err: err.array().map(x => x.msg) });
 	}
 );
+
+// @route => /auth/validate_email
+// @desc => Validate the email
+// @access => Private
+
+router.post('/validate_email', [check('email').isEmail().withMessage('You need to enter a valid email !')], async (req, res) => {
+	try {
+		let err = validationResult(req);
+		if (err.isEmpty()) {
+			const { email } = req.body
+			const result = (await db.query(`select id from t_user where email = $1;`, [email])).rows[0];
+			if (result)
+				res.json({ status: 1 });
+			else
+				res.status(400).send({ err: 'There is no user with the provided email' });
+		} else
+			res.status(400).send({ err: err.array().map(x => x.msg) });
+	} catch (error) {
+		res.status(500).send({ err: 'Server error .' });
+	}
+})
+
+// @route => /auth/register
+// @desc => Add a new user
+// @access => Private
+
+router.post('/reset_password', async (req, res) => {
+	try {
+		const { user, userid } = req.body;
+		const valid = await get_mail_id(userid);
+		if (valid === 'granted') {
+			const { new_password, email } = user;
+			const salt = await bcrypt.genSalt(10);
+			const safePassword = await bcrypt.hash(granted, salt);
+			await db.query(
+				`update t_user set password = $1 where email = $2;`,
+				[safePassword, email]
+			);
+			res.json({ status: 1 });
+		} else res.status(400).send({ err: 'Not granted .' });
+	} catch (error) {
+		res.status(500).send({ err: 'Server error .' });
+	}
+});
 
 
 // @route => /auth/register

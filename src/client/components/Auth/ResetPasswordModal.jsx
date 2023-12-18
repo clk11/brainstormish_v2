@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
 import { Button, Modal, TextField, Grid } from '@mui/material'
-const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confirmationModal, setMailGranted }) => {
+import { v4 as uuidv4 } from 'uuid';
+const ResetPasswordModal = ({ setAction, setConfirmationModalOpen, changeUI, setChangeUI, setUserid, requireConfirmation, sendConfirmationMail, verifyEmail, setOpen, resetPasswordModalOpen, setResetPasswordModalOpen }) => {
     const [input, setInput] = useState('');
 
     const handleSubmit = async () => {
-        if (input.trim().length > 0) {
-            const result = await verifiyMailId({ userid, input });
-            if (result === 1)
-                setMailGranted(true);
-            else
-                setMailGranted(false);
-            handleClose();
-        } else alert('You need to enter something !');
+       
     };
 
     const handleClose = () => {
+        requireConfirmation(false);
+        clearInput();
         setInput('');
         document.getElementById('input').value = '';
-        setConfirmationModal(false);
+        setResetPasswordModalOpen(false);
     }
+
     return (
         <div>
-            <Modal open={confirmationModal}>
+            <Modal open={resetPasswordModalOpen}>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 300, backgroundColor: localStorage.getItem('mode') === 'dark' ? 'black' : 'white', padding: 20 }}>
-                    <h4 style={{ textAlign: 'center' }}>Enter the confirmation code you received on the email you provided</h4>
+                    <h4 style={{ textAlign: 'center' }}>{!changeUI ? 'Enter the email address associated with the account whose password you want to reset' : 'Enter your new password'}</h4>
                     <TextField
                         id='input'
-                        label="Enter the code"
+                        label={!changeUI ? 'Email' : 'New password'}
                         fullWidth
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -34,7 +31,7 @@ const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confir
                     <Grid container spacing={1}>
                         <Grid item xs={8}>
                             <Button fullWidth variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: 10 }}>
-                                Submit
+                                {!changeUI ? 'SEND CODE' : 'CONFIRM'}
                             </Button>
                         </Grid>
                         <Grid item xs={4}>
@@ -44,9 +41,9 @@ const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confir
                         </Grid>
                     </Grid>
                 </div>
-            </Modal>
-        </div>
+            </Modal >
+        </div >
     );
 };
 
-export default ConfirmationModal;
+export default ResetPasswordModal;

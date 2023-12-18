@@ -11,7 +11,7 @@ const Snack = ({ alertMessage, errors, open, setOpen }) => {
       <Snackbar
         open={open}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        autoHideDuration={2000} onClose={() => {
+        autoHideDuration={1500} onClose={() => {
           setOpen(false);
         }}>
         <Alert severity={errors === null ? 'success' : 'error'} sx={{ width: '100%' }}>

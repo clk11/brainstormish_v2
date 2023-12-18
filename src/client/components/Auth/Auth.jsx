@@ -4,14 +4,17 @@ import { authAC } from "../../../redux/features";
 import { connect } from "react-redux";
 import Snack from "../Layout/SnackBar/Snack";
 import ConfirmationModal from './ConfirmationModal.jsx';
+import ResetPasswordModal from './ResetPasswordModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
-
-const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, validateCredentials, sendConfirmationMail, errors }) => {
-  const [confirmation, setConfirmation] = useState(null);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [userid, setUserid] = useState('');
-  //
+import Progress from '../Layout/ProgressBar.jsx'
+const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, validateCredentials, sendConfirmationMail, errors, resetPassword, verifyEmail }) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  //
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [mailGranted, setMailGranted] = useState(null);
+  //
+  const [userid, setUserid] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [user, setUser] = useState({
     username: "",
@@ -19,7 +22,8 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     password: "",
     rpassword: ""
   });
-  const onChange = (e) => setUser({ ...user, [e.target.id]: e.target.value });
+  //
+
   const clearInputs = () => {
     setUser({
       username: "",
@@ -29,36 +33,61 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     });
   };
 
+  //
+
+  useEffect(() => {
+    const exec = async () => {
+      if (mailGranted) {
+        await register({ userid, user });
+        setAlertMessage('Registered successfully !');
+        clearInputs();
+        changeClient();
+      }
+      setOpen(true);
+      setMailGranted(null);
+    }
+    if (mailGranted !== null) exec();
+  }, [mailGranted])
+
+  //
+
+  const onChange = (e) => setUser({ ...user, [e.target.id]: e.target.value });
+
   const onSubmit = async () => {
     if (!open) {
       if (clientLogin)
         setOpen(!(await login(user)));
       else {
-        const userid = uuidv4();
+        setLoading(true);
         const result = await validateCredentials(user);
         if (result === 1) {
+          const userid = uuidv4();
           const res = await sendConfirmationMail({ userid, to: user.email });
           if (res === 1) {
             setUserid(userid);
-            setConfirmationModalOpen(true);
+            setLoading(false);
+            setConfirmationModal(true);
           } else setOpen(true);
         } else setOpen(true);
+        setLoading(false);
       }
     }
   };
+  const forgotPassword = async () => {
+    alert('sad')
+  }
   return (
     <Container component="main" maxWidth="xs">
+      {loading && (
+        <Progress />
+      )}
       <ConfirmationModal
-        user={user}
-        setAlertMessage={setAlertMessage}
-        setOpen={setOpen}
-        clearInputs={clearInputs}
-        changeClient={changeClient}
-        register={register}
         userid={userid}
-        verifyMailId={verifyMailId}
-        confirmationModalOpen={confirmationModalOpen}
-        setConfirmationModalOpen={setConfirmationModalOpen} />
+        verifiyMailId={verifyMailId}
+        setMailGranted={setMailGranted}
+        setConfirmationModal={setConfirmationModal}
+        confirmationModal={confirmationModal}
+      />
       <Snack alertMessage={alertMessage} open={open} setOpen={setOpen} errors={errors} />
       <Box
         sx={{
@@ -135,7 +164,20 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
               </Grid>
             </Grid>
             <br />
-            <Link onClick={changeClient}>{`Go to ${clientLogin ? 'registration' : 'login'}`}</Link>
+            <Grid
+              container
+              spacing={1}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item>
+                <Link onClick={changeClient}>{`Go to ${clientLogin ? 'registration' : 'login'}`}</Link>
+              </Grid>
+              <Grid item>
+                <Link onClick={forgotPassword}>Forgot password ?</Link>
+              </Grid>
+            </Grid>
           </Box>
         </Paper>
       </Box>
@@ -166,6 +208,12 @@ const actionCreators = (dispatch) => {
     },
     verifyMailId: (data) => {
       return authAC.VerifyMailId(dispatch, data);
+    },
+    resetPassword: (data) => {
+      return authAC.ResetPassword(dispatch, data);
+    },
+    verifyEmail: (data) => {
+      return authAC.VerifyEmail(dispatch, data);
     }
   };
 };
