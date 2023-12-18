@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { Button, Modal, TextField, Grid } from '@mui/material'
-import { v4 as uuidv4 } from 'uuid';
-const ResetPasswordModal = ({ setAction, setConfirmationModalOpen, changeUI, setChangeUI, setUserid, requireConfirmation, sendConfirmationMail, verifyEmail, setOpen, resetPasswordModalOpen, setResetPasswordModalOpen }) => {
-    const [input, setInput] = useState('');
 
+const ResetPasswordModal = ({ changeUI, verifyEmail, setResetGranted, resetPasswordModal, setResetPasswordModal }) => {
+    const [input, setInput] = useState('');
     const handleSubmit = async () => {
-       
+        const result = await verifyEmail({ email: input });
+        if (result === 1)
+            setResetGranted(true);
+        else
+            setResetGranted(false);
+        handleClose();
     };
 
     const handleClose = () => {
-        requireConfirmation(false);
-        clearInput();
+        setResetPasswordModal(false);
         setInput('');
-        document.getElementById('input').value = '';
-        setResetPasswordModalOpen(false);
+        document.getElementById('input').value = ''
     }
 
     return (
         <div>
-            <Modal open={resetPasswordModalOpen}>
+            <Modal open={resetPasswordModal}>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 300, backgroundColor: localStorage.getItem('mode') === 'dark' ? 'black' : 'white', padding: 20 }}>
                     <h4 style={{ textAlign: 'center' }}>{!changeUI ? 'Enter the email address associated with the account whose password you want to reset' : 'Enter your new password'}</h4>
                     <TextField

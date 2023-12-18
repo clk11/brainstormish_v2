@@ -8,12 +8,18 @@ import ResetPasswordModal from './ResetPasswordModal.jsx';
 import { v4 as uuidv4 } from 'uuid';
 import Progress from '../Layout/ProgressBar.jsx'
 const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, validateCredentials, sendConfirmationMail, errors, resetPassword, verifyEmail }) => {
+  //Error handling modal
   const [open, setOpen] = useState(false);
+  // Loading
   const [loading, setLoading] = useState(false);
-  //
+  //Reset password modal
+  const [resetPasswordModal, setResetPasswordModal] = useState(false);
+  const [resetGranted, setResetGranted] = useState(null);
+  // const [finishReset, setFinishReset] = useState(null);
+  // Confirmation Modal
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [mailGranted, setMailGranted] = useState(null);
-  //
+  //Auth state variables
   const [userid, setUserid] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [user, setUser] = useState({
@@ -33,7 +39,7 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     });
   };
 
-  //
+  //Confirmation modal
 
   useEffect(() => {
     const exec = async () => {
@@ -49,7 +55,27 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     if (mailGranted !== null) exec();
   }, [mailGranted])
 
-  //
+  //Rest pass modal
+
+  useEffect(() => {
+    const exec = async () => {
+      if (resetGranted) {
+        const userid = uuidv4();
+        setLoading(true);
+        const res = await sendConfirmationMail({ userid, to: user.email });
+        if (res === 1) {
+          setUserid(userid);
+          setLoading(false);
+          setConfirmationModal(true);
+        } else setOpen(true);
+      }
+      setOpen(true);
+      setResetGranted(null);
+    }
+    if (resetGranted !== null) exec();
+  }, [resetGranted])
+
+  //Finish
 
   const onChange = (e) => setUser({ ...user, [e.target.id]: e.target.value });
 
@@ -74,13 +100,21 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
     }
   };
   const forgotPassword = async () => {
-    alert('sad')
+    if (!open) {
+      setResetPasswordModal(true);
+    }
   }
   return (
     <Container component="main" maxWidth="xs">
       {loading && (
         <Progress />
       )}
+      <ResetPasswordModal
+        verifyEmail={verifyEmail}
+        setResetGranted={setResetGranted}
+        resetPasswordModal={resetPasswordModal}
+        setResetPasswordModal={setResetPasswordModal}
+      />
       <ConfirmationModal
         userid={userid}
         verifiyMailId={verifyMailId}
