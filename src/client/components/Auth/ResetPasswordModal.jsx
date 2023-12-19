@@ -37,6 +37,7 @@ const ResetPasswordModal = ({ setNewPassword, setFinishReset, setResetEmail, cha
                         id='input'
                         label={!changeUI ? 'Email' : 'New password'}
                         fullWidth
+                        type={changeUI ? 'password' : 'email'}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />
