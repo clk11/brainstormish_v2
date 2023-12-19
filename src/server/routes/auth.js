@@ -162,20 +162,23 @@ router.post('/validate_email', [check('email').isEmail().withMessage('You need t
 // @desc => Add a new user
 // @access => Private
 
-router.post('/reset_password', async (req, res) => {
+router.post('/reset_password', [check('new_password').isLength({ min: 6, max: 15 }).withMessage('You should add a password between 6 and 15 chars !')], async (req, res) => {
 	try {
-		const { user, userid } = req.body;
-		const valid = await get_mail_id(userid);
-		if (valid === 'granted') {
-			const { new_password, email } = user;
-			const salt = await bcrypt.genSalt(10);
-			const safePassword = await bcrypt.hash(granted, salt);
-			await db.query(
-				`update t_user set password = $1 where email = $2;`,
-				[safePassword, email]
-			);
-			res.json({ status: 1 });
-		} else res.status(400).send({ err: 'Not granted .' });
+		let err = validationResult(req);
+		if (err.isEmpty()) {
+			const { new_password, email, userid } = req.body;
+			const valid = await get_mail_id(userid);
+			if (valid === 'granted') {
+				const salt = await bcrypt.genSalt(10);
+				const safePassword = await bcrypt.hash(new_password, salt);
+				await db.query(
+					`update t_user set password = $1 where email = $2;`,
+					[safePassword, email]
+				);
+				res.json({ status: 1 });
+			} else res.status(400).send({ err: 'Not granted .' });
+		} else
+			res.status(400).send({ err: err.array().map(x => x.msg) });
 	} catch (error) {
 		res.status(500).send({ err: 'Server error .' });
 	}

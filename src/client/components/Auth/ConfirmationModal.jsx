@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, TextField, Grid } from '@mui/material'
-const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confirmationModal, setMailGranted }) => {
+const ConfirmationModal = ({ setResetGranted, userid, verifiyMailId, setConfirmationModal, confirmationModal, setMailGranted }) => {
     const [input, setInput] = useState('');
-
     const handleSubmit = async () => {
         if (input.trim().length > 0) {
             const result = await verifiyMailId({ userid, input });
@@ -18,6 +17,7 @@ const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confir
         setInput('');
         document.getElementById('input').value = '';
         setConfirmationModal(false);
+
     }
     return (
         <div>
@@ -38,7 +38,7 @@ const ConfirmationModal = ({ userid, verifiyMailId, setConfirmationModal, confir
                             </Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button fullWidth variant="contained" color="error" onClick={handleClose} style={{ marginTop: 10 }}>
+                            <Button fullWidth variant="contained" color="error" onClick={() => { handleClose(); setResetGranted(null) }} style={{ marginTop: 10 }}>
                                 Close
                             </Button>
                         </Grid>

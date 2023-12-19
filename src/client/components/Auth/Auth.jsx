@@ -15,7 +15,10 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
   //Reset password modal
   const [resetPasswordModal, setResetPasswordModal] = useState(false);
   const [resetGranted, setResetGranted] = useState(null);
-  // const [finishReset, setFinishReset] = useState(null);
+  const [finishReset, setFinishReset] = useState(null);
+  const [changeUI, setChangeUI] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   // Confirmation Modal
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [mailGranted, setMailGranted] = useState(null);
@@ -44,10 +47,17 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
   useEffect(() => {
     const exec = async () => {
       if (mailGranted) {
-        await register({ userid, user });
-        setAlertMessage('Registered successfully !');
-        clearInputs();
-        changeClient();
+        if (resetGranted === null) {
+          await register({ userid, user });
+          setAlertMessage('Registered successfully !');
+          clearInputs();
+          changeClient();
+        } else if (resetGranted) {
+          setChangeUI(true);
+          setAlertMessage('Reset authorized !')
+          setResetGranted(null);
+          setResetPasswordModal(true);
+        }
       }
       setOpen(true);
       setMailGranted(null);
@@ -62,20 +72,29 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
       if (resetGranted) {
         const userid = uuidv4();
         setLoading(true);
-        const res = await sendConfirmationMail({ userid, to: user.email });
+        const res = await sendConfirmationMail({ userid, to: resetEmail });
         if (res === 1) {
+          setAlertMessage('Code sent to your email address');
           setUserid(userid);
           setLoading(false);
           setConfirmationModal(true);
-        } else setOpen(true);
+        }
       }
       setOpen(true);
-      setResetGranted(null);
     }
     if (resetGranted !== null) exec();
   }, [resetGranted])
 
-  //Finish
+  useEffect(() => {
+    const exec = async () => {
+      if (finishReset) {
+        await resetPassword({ email: resetEmail, new_password: newPassword, userid });
+        setAlertMessage('Password succesfully reset !');
+      }
+      setOpen(true);
+    }
+    if (finishReset !== null) exec();
+  }, [finishReset])
 
   const onChange = (e) => setUser({ ...user, [e.target.id]: e.target.value });
 
@@ -84,6 +103,7 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
       if (clientLogin)
         setOpen(!(await login(user)));
       else {
+        resetConditions();
         setLoading(true);
         const result = await validateCredentials(user);
         if (result === 1) {
@@ -91,16 +111,25 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
           const res = await sendConfirmationMail({ userid, to: user.email });
           if (res === 1) {
             setUserid(userid);
-            setLoading(false);
             setConfirmationModal(true);
+            setLoading(false);
           } else setOpen(true);
         } else setOpen(true);
         setLoading(false);
       }
     }
   };
+
+  const resetConditions = () => {
+    setChangeUI(false);
+    setResetGranted(null);
+    setMailGranted(null);
+    setFinishReset(null);
+  }
+
   const forgotPassword = async () => {
     if (!open) {
+      resetConditions();
       setResetPasswordModal(true);
     }
   }
@@ -110,12 +139,17 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
         <Progress />
       )}
       <ResetPasswordModal
+        setNewPassword={setNewPassword}
+        setFinishReset={setFinishReset}
+        setResetEmail={setResetEmail}
+        changeUI={changeUI}
         verifyEmail={verifyEmail}
         setResetGranted={setResetGranted}
         resetPasswordModal={resetPasswordModal}
         setResetPasswordModal={setResetPasswordModal}
       />
       <ConfirmationModal
+        setResetGranted={setResetGranted}
         userid={userid}
         verifiyMailId={verifyMailId}
         setMailGranted={setMailGranted}

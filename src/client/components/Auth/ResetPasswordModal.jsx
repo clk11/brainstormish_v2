@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import { Button, Modal, TextField, Grid } from '@mui/material'
 
-const ResetPasswordModal = ({ changeUI, verifyEmail, setResetGranted, resetPasswordModal, setResetPasswordModal }) => {
+const ResetPasswordModal = ({ setNewPassword, setFinishReset, setResetEmail, changeUI, verifyEmail, setResetGranted, resetPasswordModal, setResetPasswordModal }) => {
     const [input, setInput] = useState('');
     const handleSubmit = async () => {
-        const result = await verifyEmail({ email: input });
-        if (result === 1)
-            setResetGranted(true);
-        else
-            setResetGranted(false);
-        handleClose();
+        if (!changeUI) {
+            const result = await verifyEmail({ email: input });
+            if (result === 1) {
+                setResetEmail(input);
+                setResetGranted(true);
+            }
+            else
+                setResetGranted(false);
+            handleClose();
+
+        } else {
+            setNewPassword(input);
+            setResetPasswordModal(false);
+            setFinishReset(true);
+            handleClose();
+        }
     };
 
     const handleClose = () => {
         setResetPasswordModal(false);
         setInput('');
-        document.getElementById('input').value = ''
+        document.getElementById('input').value = '';
     }
 
     return (
@@ -37,7 +47,7 @@ const ResetPasswordModal = ({ changeUI, verifyEmail, setResetGranted, resetPassw
                             </Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button fullWidth variant="contained" color="error" onClick={handleClose} style={{ marginTop: 10 }}>
+                            <Button fullWidth variant="contained" color="error" onClick={() => { handleClose(); setResetGranted(null); }} style={{ marginTop: 10 }}>
                                 Close
                             </Button>
                         </Grid>
