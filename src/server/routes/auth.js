@@ -95,15 +95,46 @@ router.post(
 		check('username')
 			.not()
 			.isEmpty()
-			.withMessage("Username shouldn't be empty !"),
+			.withMessage("Username shouldn't be empty!")
+			.custom(value => {
+				if (value.includes(' ')) {
+					throw new Error("Username shouldn't contain spaces!");
+				}
+				return true;
+			})
+			.custom(value => {
+				const words = value.split(' ');
+				return words.length === 1;
+			})
+			.withMessage("Username should be a single word !"),
+
 		check('password')
 			.isLength({ min: 6, max: 15 })
-			.withMessage('You should add a password between 6 and 15 chars !'),
-		check('email').isEmail().withMessage('You need to enter a valid email !'),
+			.withMessage('You should add a password between 6 and 15 characters!')
+			.custom(value => {
+				if (value.includes(' ')) {
+					throw new Error("Password shouldn't contain spaces!");
+				}
+				return true;
+			}),
+
+		check('email')
+			.isEmail()
+			.withMessage('You need to enter a valid email!')
+			.custom(value => {
+				if (value.includes(' ')) {
+					throw new Error("Email shouldn't contain spaces!");
+				}
+				return true;
+			}),
+
 		check('rpassword')
 			.custom((value, { req }) => {
 				if (value !== req.body.password) {
 					throw new Error('Your passwords do not match.');
+				}
+				if (value.includes(' ')) {
+					throw new Error("Repeated password shouldn't contain spaces!");
 				}
 				return true;
 			}),
