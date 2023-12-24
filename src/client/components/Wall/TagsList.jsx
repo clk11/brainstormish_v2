@@ -89,7 +89,7 @@ const Tags = ({ setTags, tags }) => {
 	);
 
 	return (
-		<Grid container spacing={0.7} sx={{ marginBottom: '25px' }}>
+		<Grid container spacing={2} sx={{ marginBottom: '1.5625rem' }}>
 			<Grid item>
 				<TextField
 					onChange={(e) => setTag(e.target.value)}
@@ -109,7 +109,7 @@ const Tags = ({ setTags, tags }) => {
 						bgcolor: 'background.paper',
 						position: 'relative',
 						overflow: 'auto',
-						maxHeight: 130,
+						maxHeight: '8.125rem',
 					}}
 				>
 					<TransitionGroup>

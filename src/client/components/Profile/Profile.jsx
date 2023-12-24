@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import ProgressBar from '../Layout/ProgressBar';
-import { Grid } from '@mui/material';
+import { Grid, Avatar, Typography } from '@mui/material';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authAC, wallAC } from '../../../redux/features/';
@@ -33,7 +33,7 @@ const Profile = ({ getUser, user, change }) => {
 	}, [change]);
 
 	return (
-		<div style={{ fontSize: '130%' }}>
+		<div style={{ fontSize: '1.3rem' }}>
 			{loading && <ProgressBar />}
 			{!loading && (
 				<div>
@@ -45,9 +45,22 @@ const Profile = ({ getUser, user, change }) => {
 						alignItems='center'
 					>
 						<Grid item>
-							<h2>{user.username}</h2>
-							<h5>{user.email}</h5>
-							<h5>I became cool on {user.date}</h5>
+							<Avatar
+								src={'/icon.png'}
+								alt={user.username}
+								sx={{ width: '15rem', height: '15rem', margin: 'auto' }}
+							/>
+						</Grid>
+						<Grid item sx={{ textAlign: 'center' }}>
+							<Typography variant="h4" sx={{ fontSize: '2.5rem', margin: '1rem', marginTop: 0 }}>
+								{user.username}
+							</Typography>
+							<Typography variant="subtitle1" sx={{ fontSize: '1.2rem', margin: '0.5rem 0' }}>
+								{user.email}
+							</Typography>
+							<Typography variant="subtitle2" sx={{ fontSize: '1.1rem', margin: '0.5rem 0' }}>
+								I became cool on {user.date}
+							</Typography>
 						</Grid>
 						<Grid item container justifyContent='center' spacing={2}>
 							<Grid item>
@@ -67,7 +80,6 @@ const Profile = ({ getUser, user, change }) => {
 			)}
 		</div>
 	);
-
 };
 
 const stateProps = (state) => {

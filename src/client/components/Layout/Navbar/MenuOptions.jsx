@@ -1,7 +1,7 @@
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import customAxios from '../../../../server/utils/customAxios.js'
-import { List, ListItem, Grid, IconButton, Button } from '@mui/material';
+import customAxios from '../../../../server/utils/customAxios.js';
+import { Grid, IconButton, Button, Avatar, Typography, Divider } from '@mui/material';
 
 const MenuOptions = ({ setOpen, user, setChange, navigate, toggleMode }) => {
     const logout = async () => {
@@ -33,56 +33,56 @@ const MenuOptions = ({ setOpen, user, setChange, navigate, toggleMode }) => {
         navigate('/');
         setOpen(false);
     }
+
     return (
         <Grid
             container
             direction="column"
             justifyContent="center"
             alignItems="center"
-            spacing={1.5}
+            spacing={2}
         >
             <Grid item>
-                <Button onClick={toProfile}>
-                    Profile
+                <Button onClick={toProfile} style={{color:'grey'}}>
+                    <Avatar src={user.profileImage} alt={user.username} sx={{ marginRight: '0.5rem' }} />
+                    <Typography variant="h6">{user.username}</Typography>
                 </Button>
             </Grid>
             <Grid item>
                 <Button onClick={toCreate}>
-                    Create post
+                    Create Post
                 </Button>
             </Grid>
             <Grid item>
                 <Button onClick={toWall}>
-                    Unjoined posts
+                    Unjoined Posts
                 </Button>
             </Grid>
             <Grid item>
                 <Button onClick={toJoined}>
-                    Joined posts
+                    Joined Posts
                 </Button>
             </Grid>
             <Grid item>
                 <Button onClick={toCreated}>
-                    Created posts
+                    Created Posts
                 </Button>
             </Grid>
             <Grid item>
-                <Button onClick={logout}>
+                <Button onClick={logout} color="secondary">
                     Log out
                 </Button>
             </Grid>
             <Grid item>
                 <IconButton
-                    variant="contained"
                     onClick={() => {
                         toggleMode();
                     }}
                     size="large"
                 >
-                    {localStorage.getItem('mode') === 'light' && (
+                    {localStorage.getItem('mode') === 'light' ? (
                         <DarkModeIcon />
-                    )}
-                    {localStorage.getItem('mode') === 'dark' && (
+                    ) : (
                         <LightModeIcon />
                     )}
                 </IconButton>
