@@ -6,9 +6,11 @@ import ChatUsers from './ChatUsers';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
+import Progress from '../Layout/ProgressBar';
 
 const ChatComponent = ({ user, socket }) => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
@@ -19,7 +21,6 @@ const ChatComponent = ({ user, socket }) => {
         const fetch = async () => {
             await joinRoom();
             await getMessages();
-
         }
         fetch();
         const handleReceivedMessage = obj => {
@@ -46,6 +47,7 @@ const ChatComponent = ({ user, socket }) => {
                 });
                 setRight(prev => prev - 6);
             };
+            setLoading(false);
         }
 
         socket.on('received_message', handleReceivedMessage);
@@ -65,6 +67,7 @@ const ChatComponent = ({ user, socket }) => {
 
     async function getMessages() {
         await socket.emit('get_messages', { room: user.room, right });
+        setLoading(true);
     }
 
     async function getUsers() {
@@ -97,41 +100,46 @@ const ChatComponent = ({ user, socket }) => {
 
     return (
         <Container maxWidth="md" sx={{ height: '80vh', display: 'flex', flexDirection: 'column' }}>
-            <Paper elevation={5} sx={{ borderStyle: 'solid', borderColor: 'Grey', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <ChatUsers open={open} setOpen={setOpen} users={users} navigate={navigate} />
-                <Grid container justifyContent={'flex-end'} spacing={2}>
-                    <Grid item>
-                        <Button
-                            variant="contained" onClick={getUsers}>PARTICIPANTS
-                        </Button>
+            {loading && (
+                <Progress />
+            )}
+            {!loading && (
+                <Paper elevation={5} sx={{ borderStyle: 'solid', borderColor: 'Grey', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <ChatUsers open={open} setOpen={setOpen} users={users} navigate={navigate} />
+                    <Grid container justifyContent={'flex-end'} spacing={2}>
+                        <Grid item>
+                            <Button
+                                variant="contained" onClick={getUsers}>PARTICIPANTS
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Divider />
-                <Grid container justifyContent={'center'} sx={{ flex: 1 }}>
-                    {loadMoreVisibility && (
-                        <Button onClick={async () => await getMessages()}>Load more</Button>
-                    )}
-                    <Grid item xs={12} sx={{ overflowY: 'auto' }}>
-                        <ChatMessages empty={empty} setLoadMoreVisibility={setLoadMoreVisibility} messages={messages} navigate={navigate} />
+                    <Divider />
+                    <Grid container justifyContent={'center'} sx={{ flex: 1 }}>
+                        {loadMoreVisibility && (
+                            <Button onClick={async () => await getMessages()}>Load more</Button>
+                        )}
+                        <Grid item xs={12} sx={{ overflowY: 'auto' }}>
+                            <ChatMessages empty={empty} setLoadMoreVisibility={setLoadMoreVisibility} messages={messages} navigate={navigate} />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container justifyContent="flex-end" sx={{ padding: 2 }}>
-                    <Grid item xs>
-                        <TextField
-                            fullWidth
-                            id='message'
-                            variant="outlined"
-                            onKeyDown={(e) => { if (e.key === 'Enter') onSend() }}
-                            placeholder="Type a message"
-                        />
+                    <Grid container justifyContent="flex-end" sx={{ padding: 2 }}>
+                        <Grid item xs>
+                            <TextField
+                                fullWidth
+                                id='message'
+                                variant="outlined"
+                                onKeyDown={(e) => { if (e.key === 'Enter') onSend() }}
+                                placeholder="Type a message"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<SendIcon />} onClick={onSend}>
+                                Send
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<SendIcon />} onClick={onSend}>
-                            Send
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Paper>
+                </Paper>
+            )}
         </Container>
     );
 

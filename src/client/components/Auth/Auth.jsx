@@ -240,10 +240,10 @@ const Auth = ({ changeClient, clientLogin, login, register, verifyMailId, valida
               alignItems="center"
             >
               <Grid item>
-                <Link onClick={changeClient}>{`Go to ${clientLogin ? 'registration' : 'login'}`}</Link>
+                <Link sx={{ cursor: 'pointer' }} onClick={changeClient}>{`Go to ${clientLogin ? 'registration' : 'login'}`}</Link>
               </Grid>
               <Grid item>
-                <Link onClick={forgotPassword}>Forgot password ?</Link>
+                <Link sx={{ cursor: 'pointer' }} onClick={forgotPassword}>Forgot password ?</Link>
               </Grid>
             </Grid>
           </Box>
