@@ -33,13 +33,11 @@ const ChatMessages = ({ setLoadMoreVisibility, messages, navigate, empty }) => {
         const observer = new MutationObserver(onMutation);
         observer.observe(listRef.current, { childList: true });
         return () => {
-          if (observer) {
+          if (observer)
             observer.disconnect();
-          }
         };
-      } else {
+      } else
         listRef.current.scrollTop = listRef.current.scrollHeight;
-      }
     }
   }, [messages]);
 

@@ -49,9 +49,9 @@ const Post = ({ post, join, navigate }) => {
 	};
 	const onJoin = async () => {
 		if (!(post.status === 0 ? false : true))
-			await join({ admin_username: username, id_post: id, path: `/bench/${title}/${id}` }, navigate);
+			await join({ admin_username: username, id_post: id, path: `/bench/${id}` }, navigate);
 		else {
-			navigate(`/bench/${title}/${id}`);
+			navigate(`/bench/${id}`);
 		}
 	};
 
