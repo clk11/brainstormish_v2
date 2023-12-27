@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper, Container, Grid, Divider, Button } from '@mui/material';
+import { Paper, Container, Grid, Divider, Button, useMediaQuery } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ChatMessages from './ChatMessages';
 import ChatUsers from './ChatUsers';
@@ -17,6 +17,7 @@ const ChatComponent = ({ user, socket }) => {
     const [right, setRight] = useState(-1);
     const [empty, setEmpty] = useState(null);
     const [loadMoreVisibility, setLoadMoreVisibility] = useState(false);
+    const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     useEffect(() => {
         const fetch = async () => {
             await joinRoom();
@@ -133,9 +134,11 @@ const ChatComponent = ({ user, socket }) => {
                             />
                         </Grid>
                         <Grid item>
-                            <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<SendIcon />} onClick={onSend}>
-                                Send
-                            </Button>
+                            {!isSmallScreen && (
+                                <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<SendIcon />} onClick={onSend}>
+                                    Send
+                                </Button>
+                            )}
                         </Grid>
                     </Grid>
                 </Paper>
