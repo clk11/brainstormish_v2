@@ -44,13 +44,6 @@ const Profile = ({ getUser, user, change }) => {
 						justifyContent='center'
 						alignItems='center'
 					>
-						<Grid item>
-							<Avatar
-								src={'/icon.png'}
-								alt={user.username}
-								sx={{ width: '15rem', height: '15rem', margin: 'auto' }}
-							/>
-						</Grid>
 						<Grid item sx={{ textAlign: 'center' }}>
 							<Typography variant="h4" sx={{ fontSize: '2.5rem', margin: '1rem', marginTop: 0 }}>
 								{user.username}

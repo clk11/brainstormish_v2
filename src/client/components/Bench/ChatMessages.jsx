@@ -43,7 +43,7 @@ const ChatMessages = ({ setLoadMoreVisibility, messages, navigate, empty }) => {
 
   return (
     <div>
-      <List ref={listRef} onScroll={handleScroll} sx={{ height: '70vh', overflowY: 'auto' }}>
+      <List ref={listRef} onScroll={handleScroll} sx={{ height: '60vh', overflowY: 'auto' }}>
         {messages.map(({ message, username }) => (
           <ListItem key={uuidv4()} divider>
             <Grid container spacing={2}>

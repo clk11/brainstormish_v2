@@ -41,7 +41,6 @@ const Navbar = ({ toggleMode, getUser, setChange, user }) => {
 						onClick={() => {
 							setOpen(true);
 						}}
-						color='secondary'
 						size='large'
 					>
 						<MenuIcon fontSize='inherit' />

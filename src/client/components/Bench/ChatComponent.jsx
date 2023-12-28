@@ -90,7 +90,7 @@ const ChatComponent = ({ user, socket }) => {
 
     async function onSend() {
         const message = document.getElementById('message').value;
-        if (message.length !== 0) {
+        if (message.trim().length !== 0) {
             const newMessage = { message: message, username: user.username };
             await socket.emit('send_message', { user, message });
             setMessages(prev => [...prev, newMessage]);

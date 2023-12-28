@@ -68,25 +68,27 @@ const Wall = ({ getPosts, posts, joinDiscussion, change }) => {
 		}
 	};
 	return (
-		<Container>
-			{loading && <ProgressBar />}
-			{!loading && (
-				<Grid
-					spacing={4}
-					container
-					direction='column'
-					justifyContent='center'
-					alignItems='center'
-				>
-					<Grid item>
-						<Search setPage={setPage} posts={posts} setFilteredPosts={setFilteredPosts} />
+		<>
+			<Container>
+				{loading && <ProgressBar />}
+				{!loading && (
+					<Grid
+						spacing={4}
+						container
+						direction='column'
+						justifyContent='center'
+						alignItems='center'
+					>
+						{/* <Grid item style={{ position: 'sticky', top: 0 }}>
+							<Search setPage={setPage} posts={posts} setFilteredPosts={setFilteredPosts} />
+						</Grid> */}
+						<Grid item>
+							{filteredPosts.length === 0 ? displayPosts(posts) : displayPosts(filteredPosts)}
+						</Grid>
 					</Grid>
-					<Grid item>
-						{filteredPosts.length === 0 ? displayPosts(posts) : displayPosts(filteredPosts)}
-					</Grid>
-				</Grid>
-			)}
-		</Container>
+				)}
+			</Container>
+		</>
 	);
 };
 
