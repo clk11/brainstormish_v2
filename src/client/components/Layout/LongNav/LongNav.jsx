@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { styled, alpha, AppBar, Toolbar, Typography, InputBase, Avatar } from '@mui/material';
+import { styled, alpha, AppBar, Toolbar, Typography, InputBase, Avatar, useMediaQuery } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import Navbar from '../Navbar/Navbar';
-import Search from '../../Wall/Search';
+import { useNavigate } from 'react-router-dom';
+
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -44,7 +45,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const LongNav = ({ setChange, toggleMode }) => {
+const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
+    const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+    const navigate = useNavigate();
+    const [input, setInput] = React.useState('');
+    const onSearch = () => {
+        // i need to use navigate
+        if (input.trim().length !== 0) {
+            setSearchInput(input);
+            setStart(true);
+            setInput('')
+        }
+    }
     return (
         <AppBar sx={{ marginBottom: '20px', position: 'sticky', top: 0, zIndex: 1 }} position="static">
             <Toolbar>
@@ -66,6 +78,10 @@ const LongNav = ({ setChange, toggleMode }) => {
                         <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
+                        id='input'
+                        value={input}
+                        onKeyDown={(e) => { if (e.key === 'Enter') onSearch() }}
+                        onChange={(e) => setInput(e.target.value)}
                         placeholder="Search…"
                     />
                 </Search>

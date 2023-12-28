@@ -1,7 +1,7 @@
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import customAxios from '../../../../server/utils/customAxios.js';
-import { Grid, IconButton, Button, Avatar, Typography, Divider } from '@mui/material';
+import { Grid, IconButton, Button, Avatar, Typography } from '@mui/material';
 
 const MenuOptions = ({ setOpen, user, setChange, navigate, toggleMode }) => {
     const logout = async () => {

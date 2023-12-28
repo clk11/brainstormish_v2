@@ -12,6 +12,10 @@ const Wall = lazy(() => import('./components/Wall/Wall'));
 const Chat = lazy(() => import('./components/Bench/Chat'));
 const LongNav = lazy(() => import('./components/Layout/LongNav/LongNav'))
 const App = () => {
+	//Navbar driver
+	const [start, setStart] = useState(false);
+	const [searchInput, setSearchInput] = useState('');
+	//
 	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
 	const [isAuth, setIsAuth] = useState(null);
 	const [change, setChange] = useState(null);
@@ -44,6 +48,13 @@ const App = () => {
 
 	const toggleMode = () => setIsDarkMode(!isDarkMode);
 
+	const commonProps = {
+		start,
+		setStart,
+		searchInput,
+		setSearchInput,
+		change,
+	};
 	return (
 		<Router>
 			{theme && isAuth !== null ? (
@@ -52,14 +63,14 @@ const App = () => {
 					<Suspense fallback={<ProgressBar />}>
 						{isAuth ? (
 							<Fragment>
-								<LongNav setChange={setChange} toggleMode={toggleMode} />
+								<LongNav setChange={setChange} setStart={setStart} setSearchInput={setSearchInput} toggleMode={toggleMode} />
 								<div className='row'>
 									<Routes>
 										<Route path='/' element={<Profile />} />
 										<Route path='/wall/profile/:user' element={<Profile change={change} />} />
-										<Route path='/wall' element={<Wall change={change} />} />
-										<Route path='/wall/:user/posts' element={<Wall change={change} />} />
-										<Route path='/wall/:user/posts/joined' element={<Wall change={change} />} />
+										<Route path='/wall' element={<Wall {...commonProps} />} />
+										<Route path='/wall/:user/posts' element={<Wall {...commonProps} />} />
+										<Route path='/wall/:user/posts/joined' element={<Wall {...commonProps} />} />
 										<Route path='/createPost' element={<NewPost />} />
 										<Route path='/bench/:postid' element={<Chat />} />
 									</Routes>
