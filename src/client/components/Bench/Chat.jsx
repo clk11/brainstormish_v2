@@ -4,10 +4,13 @@ import { authAC, benchAC } from '../../../redux/features/';
 import ProgressBar from '../Layout/ProgressBar';
 import ChatComponent from './ChatComponent';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const Chat = ({ user, getUser, membership, getMembership, setFullBar }) => {
-  const { title, postid } = useParams();
+  const location = useLocation();
+  const { title, description } = location.state;
+  const { postid } = useParams();
+  const [info, _] = useState({ title, description });
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
 
@@ -45,7 +48,7 @@ const Chat = ({ user, getUser, membership, getMembership, setFullBar }) => {
         loading || !user ? (
           <ProgressBar />
         ) : (
-          <ChatComponent socket={socket} user={{ title, room: postid, username: user.username }} />
+          <ChatComponent socket={socket} user={{ room: postid, username: user.username }} info={info} />
         )
       )}
       {membership === false && (

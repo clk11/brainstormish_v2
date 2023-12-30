@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Paper, Container, Grid, Divider, Button, useMediaQuery } from '@mui/material';
+import { Paper, Container, Grid, Divider, Button, useMediaQuery, IconButton } from '@mui/material';
+import { Send, Groups2, Info } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import ChatMessages from './ChatMessages';
-import ChatUsers from './ChatUsers';
+import ChatInfo from './ChatInfo';
 import TextField from '@mui/material/TextField';
-import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import Progress from '../Layout/ProgressBar';
 
-const ChatComponent = ({ user, socket }) => {
+const ChatComponent = ({ user, socket, info }) => {
     const navigate = useNavigate();
+    const [type, setType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [users, setUsers] = useState([]);
@@ -73,6 +74,12 @@ const ChatComponent = ({ user, socket }) => {
 
     async function getUsers() {
         await socket.emit('get_users', user.room);
+        setType(true);
+        setOpen(true);
+    }
+
+    async function getInfo() {
+        setType(false);
         setOpen(true);
     }
 
@@ -106,12 +113,17 @@ const ChatComponent = ({ user, socket }) => {
             )}
             {!loading && (
                 <Paper elevation={5} sx={{ borderStyle: 'solid', borderColor: 'Grey', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <ChatUsers open={open} setOpen={setOpen} users={users} navigate={navigate} />
-                    <Grid container justifyContent={'flex-end'} spacing={2}>
+                    <ChatInfo open={open} setOpen={setOpen} users={users} navigate={navigate} info={info} type={type} />
+                    <Grid container justifyContent={'flex-end'}>
                         <Grid item>
-                            <Button
-                                variant="contained" onClick={getUsers}>PARTICIPANTS
-                            </Button>
+                            <IconButton onClick={getUsers}>
+                                <Groups2 />
+                            </IconButton>
+                        </Grid>
+                        <Grid item>
+                            <IconButton onClick={getInfo}>
+                                <Info />
+                            </IconButton>
                         </Grid>
                     </Grid>
                     <Divider />
@@ -135,7 +147,7 @@ const ChatComponent = ({ user, socket }) => {
                         </Grid>
                         <Grid item>
                             {!isSmallScreen && (
-                                <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<SendIcon />} onClick={onSend}>
+                                <Button sx={{ height: '3.5rem' }} variant="contained" endIcon={<Send />} onClick={onSend}>
                                     Send
                                 </Button>
                             )}

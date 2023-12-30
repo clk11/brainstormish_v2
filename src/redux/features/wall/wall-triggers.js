@@ -53,7 +53,7 @@ export const JoinDiscussion = async (dispatch, data, navigate) => {
 	try {
 		await customAxios.post('/wall/join', data);
 		dispatch(joinDiscussion());
-		navigate(data.path);
+		navigate(data.path, data.info);
 	} catch (error) {
 		dispatch(joinDiscussionFailed(error.response.data.err));
 	}
