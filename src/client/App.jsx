@@ -11,11 +11,12 @@ const Profile = lazy(() => import('./components/Profile/Profile'));
 const Wall = lazy(() => import('./components/Wall/Wall'));
 const Chat = lazy(() => import('./components/Bench/Chat'));
 const LongNav = lazy(() => import('./components/Layout/LongNav/LongNav'))
+
 const App = () => {
 	//Navbar driver
 	const [start, setStart] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
-	const [fullBar, setFullBar] = useState(null);
+	const [fullBar, setFullBar] = useState(true);
 	//
 	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
 	const [isAuth, setIsAuth] = useState(null);
