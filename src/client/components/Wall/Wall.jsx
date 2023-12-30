@@ -13,10 +13,13 @@ const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, search
 	const [filteredPosts, setFilteredPosts] = useState([]);
 
 	useEffect(() => {
+		console.log('loading the posts');
 		const fetchData = async () => {
 			const result = await getPosts(get_order());
-			if (result === 1)
+			if (result === 1) {
 				setLoading(false);
+				setFilteredPosts([]);
+			}
 		}
 		fetchData();
 	}, [change]);

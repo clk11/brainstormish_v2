@@ -6,7 +6,7 @@ import ChatComponent from './ChatComponent';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-const Chat = ({ user, getUser, membership, getMembership }) => {
+const Chat = ({ user, getUser, membership, getMembership, setFullBar }) => {
   const { title, postid } = useParams();
   const [loading, setLoading] = useState(true);
   const [socket, setSocket] = useState(null);
@@ -19,10 +19,12 @@ const Chat = ({ user, getUser, membership, getMembership }) => {
   }, [])
 
   useEffect(() => {
+    setFullBar(false);
     const socketInstance = io(import.meta.env.VITE_API_URL);
     setSocket(socketInstance);
     return () => {
       socketInstance.disconnect();
+      setFullBar(true);
     };
   }, []);
 

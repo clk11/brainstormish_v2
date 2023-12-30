@@ -15,6 +15,7 @@ const App = () => {
 	//Navbar driver
 	const [start, setStart] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
+	const [fullBar, setFullBar] = useState(null);
 	//
 	const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('mode') === 'dark');
 	const [isAuth, setIsAuth] = useState(null);
@@ -52,6 +53,7 @@ const App = () => {
 		start,
 		setStart,
 		searchInput,
+		setChange,
 		setSearchInput,
 		change,
 	};
@@ -63,7 +65,11 @@ const App = () => {
 					<Suspense fallback={<ProgressBar />}>
 						{isAuth ? (
 							<Fragment>
-								<LongNav setChange={setChange} setStart={setStart} setSearchInput={setSearchInput} toggleMode={toggleMode} />
+								{fullBar ? (
+									<LongNav setChange={setChange} setStart={setStart} setSearchInput={setSearchInput} toggleMode={toggleMode} />
+								) : (
+									<Navbar setChange={setChange} toggleMode={toggleMode} />
+								)}
 								<div className='row'>
 									<Routes>
 										<Route path='/' element={<Profile />} />
@@ -72,7 +78,7 @@ const App = () => {
 										<Route path='/wall/:user/posts' element={<Wall {...commonProps} />} />
 										<Route path='/wall/:user/posts/joined' element={<Wall {...commonProps} />} />
 										<Route path='/createPost' element={<NewPost />} />
-										<Route path='/bench/:postid' element={<Chat />} />
+										<Route path='/bench/:postid' element={<Chat setFullBar={setFullBar} />} />
 									</Routes>
 								</div>
 							</Fragment>
