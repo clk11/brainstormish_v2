@@ -52,9 +52,13 @@ const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
     const onSearch = () => {
         // i need to use navigate
         if (input.trim().length !== 0) {
+            if (!window.location.href.includes('/wall')) {
+                setChange('/wall');
+                navigate('/wall');
+            }
             setSearchInput(input);
             setStart(true);
-            setInput('')
+            setInput('');
         }
     }
     return (

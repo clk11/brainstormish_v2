@@ -6,19 +6,21 @@ import ProgressBar from '../Layout/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from '@mui/material';
 import PaginatedList from './PaginatedList';
-const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, searchInput, setSearchInput }) => {
+const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, searchInput, setSearchInput, setChange }) => {
 	const navigate = useNavigate();
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const [filteredPosts, setFilteredPosts] = useState([]);
 
 	useEffect(() => {
-		console.log('loading the posts');
 		const fetchData = async () => {
 			const result = await getPosts(get_order());
 			if (result === 1) {
 				setLoading(false);
-				setFilteredPosts([]);
+				if (searchInput.trim().length === 0)
+					setFilteredPosts([]);
+				else
+					setStart(true);
 			}
 		}
 		fetchData();
@@ -28,6 +30,8 @@ const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, search
 		const exec = () => {
 			onSearch();
 			setStart(false);
+			if (filteredPosts.length !== 0 && searchInput.trim().length === 0)
+				setFilteredPosts(filteredPosts)
 		}
 		if (start === true) exec();
 	}, [start])
