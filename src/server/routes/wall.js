@@ -21,14 +21,21 @@ router.post(
 	'/',
 	[
 		check('title')
-			.isLength({ min: 2, max: 1000 })
-			.withMessage('The title should be between 2 chars and 10000 !'),
+			.isLength({ min: 2, max: 255 })
+			.withMessage('The title should be between 2 chars and 255 !'),
 		check('description')
-			.isLength({ min: 20, max: 10000 })
-			.withMessage('The description should be between 20 chars and 10000 !'),
+			.isLength({ min: 20, max: 500 })
+			.withMessage('The description should be between 20 chars and 500 !'),
 		check('tags')
 			.isArray({ min: 1 })
-			.withMessage('You should add at least one tag !'),
+			.withMessage('You should add at least one tag !')
+			.custom(tags => {
+				const isInvalid = tags.some(tag => tag.length > 30);
+				if (isInvalid) {
+					throw new Error('Each tag should have a character count less than 30.');
+				}
+				return true;
+			})
 	],
 	auth,
 	async (req, res) => {
@@ -36,6 +43,7 @@ router.post(
 		if (err.isEmpty()) {
 			try {
 				const { description, title, tags } = req.body;
+				console.log(description, title, tags);
 				const userid = (
 					await db.query(`select id from t_user where username = $1;`, [
 						req.user.username,
@@ -70,7 +78,7 @@ router.post(
 			} catch (err) {
 				res.status(500).send({ err: 'Server error .' });
 			}
-		} else return res.status(500).send({ err: err.array().map(x => x.msg)  });
+		} else return res.status(500).send({ err: err.array().map(x => x.msg) });
 	}
 );
 
