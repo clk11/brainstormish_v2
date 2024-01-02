@@ -43,7 +43,6 @@ router.post(
 		if (err.isEmpty()) {
 			try {
 				const { description, title, tags } = req.body;
-				console.log(description, title, tags);
 				const userid = (
 					await db.query(`select id from t_user where username = $1;`, [
 						req.user.username,
