@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled, alpha, AppBar, Toolbar, Typography, InputBase, Avatar, useMediaQuery } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import { AlternateEmail, Search as SearchIcon } from '@mui/icons-material';
 import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -50,11 +50,10 @@ const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
     const navigate = useNavigate();
     const [input, setInput] = React.useState('');
     const onSearch = () => {
-        // i need to use navigate
         if (input.trim().length !== 0) {
             if (!window.location.href.includes('/wall')) {
-                setChange('/wall');
                 navigate('/wall');
+                setChange('/wall');
             }
             setSearchInput(input);
             setStart(true);

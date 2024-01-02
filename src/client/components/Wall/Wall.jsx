@@ -6,35 +6,40 @@ import ProgressBar from '../Layout/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from '@mui/material';
 import PaginatedList from './PaginatedList';
-const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, searchInput, setSearchInput, setChange }) => {
+const Wall = ({ getPosts, all_posts, joinDiscussion, change, start, setStart, searchInput, setSearchInput, setChange }) => {
 	const navigate = useNavigate();
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
-	const [filteredPosts, setFilteredPosts] = useState([]);
+	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const result = await getPosts(get_order());
-			if (result === 1) {
+			if (result === 1)
 				setLoading(false);
-				if (searchInput.trim().length === 0)
-					setFilteredPosts([]);
-				else
-					setStart(true);
-			}
 		}
 		fetchData();
 	}, [change]);
 
 	useEffect(() => {
-		const exec = () => {
-			onSearch();
+		if (all_posts)
+			setPosts(all_posts);
+	}, [all_posts])
+
+	useEffect(() => {
+		return () => {
 			setStart(false);
-			if (filteredPosts.length !== 0 && searchInput.trim().length === 0)
-				setFilteredPosts(filteredPosts)
+			setSearchInput('');
+			setPosts([]);
 		}
-		if (start === true) exec();
-	}, [start])
+	}, [])
+
+	useEffect(() => {
+		const search = () => {
+			onSearch();
+		}
+		if (start && !loading) search();
+	}, [start, loading])
 
 	const str_tags = (str) => {
 		const splited_str = str.split(' ').map(x => x.toLowerCase()).filter(x => x.length > 0);
@@ -74,11 +79,11 @@ const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, search
 
 	const onSearch = () => {
 		setPage(1);
-		setFilteredPosts([]);
 		if (searchInput.trim().length !== 0) {
 			const filtered_posts = filterPosts();
-			setFilteredPosts(filtered_posts);
-			setSearchInput('')
+			setPosts(filtered_posts);
+			setStart(false);
+			setSearchInput('');
 		}
 	}
 
@@ -140,7 +145,7 @@ const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, search
 						alignItems='center'
 					>
 						<Grid item>
-							{filteredPosts.length === 0 ? displayPosts(posts) : displayPosts(filteredPosts)}
+							{displayPosts(posts)}
 						</Grid>
 					</Grid>
 				)}
@@ -151,7 +156,7 @@ const Wall = ({ getPosts, posts, joinDiscussion, change, start, setStart, search
 
 const stateProps = (state) => {
 	return {
-		posts: state.wall.posts,
+		all_posts: state.wall.posts,
 	};
 };
 
