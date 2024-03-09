@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import ProgressBar from '../Layout/ProgressBar';
-import { Grid, Avatar, Typography } from '@mui/material';
-import { connect } from 'react-redux';
+import { Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { authAC, wallAC } from '../../../redux/features/';
 
 const Profile = ({ getUser, user, change }) => {
@@ -58,13 +58,26 @@ const Profile = ({ getUser, user, change }) => {
 						<Grid item container justifyContent='center' spacing={2}>
 							<Grid item>
 								{!my && (
-									<Button
-										onClick={() => navigate(`/wall/${user.username}/posts`)}
-										variant='contained'
-										color='primary'
-									>
-										{'Discussions'}
-									</Button>
+									<Grid container spacing={1.5}>
+										<Grid item>
+											<Button
+												onClick={() => navigate(`/wall/${user.username}/posts`)}
+												variant='contained'
+												color='primary'
+											>
+												{'Discussions'}
+											</Button>
+										</Grid>
+										<Grid item>
+											<Button
+												onClick={() => navigate(`/wall/${user.username}/posts/joined`)}
+												variant='contained'
+												color='secondary'
+											>
+												{'Joined posts'}
+											</Button>
+										</Grid>
+									</Grid>
 								)}
 							</Grid>
 						</Grid>

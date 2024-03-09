@@ -49,7 +49,7 @@ const htmlContent = `
 <body>
     <div class="container">
         <h1>Hello!</h1>
-        <h2>Thank you for joining Brainstormish! Please find your confirmation ID below:</h2>
+        <h2>Please find your confirmation code below:</h2>
         <h1 id="uniqueId"></h1>
     </div>
 </body>

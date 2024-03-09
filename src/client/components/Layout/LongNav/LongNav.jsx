@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { styled, alpha, AppBar, Toolbar, Typography, InputBase, Avatar, useMediaQuery } from '@mui/material';
-import { AlternateEmail, Search as SearchIcon } from '@mui/icons-material';
+import { styled, alpha, AppBar, Toolbar, Typography, InputBase, Avatar } from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
 import Navbar from '../Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -45,8 +46,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
-    const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+const LongNav = ({ setChange, toggleMode, setStart, setSearchInput, user }) => {
+    // const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const navigate = useNavigate();
     const [input, setInput] = React.useState('');
     const onSearch = () => {
@@ -64,6 +65,7 @@ const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
         <AppBar sx={{ marginBottom: '20px', position: 'sticky', top: 0, zIndex: 1 }} position="static">
             <Toolbar>
                 <Avatar
+                    onClick={() => { navigate(`/wall/${user.username}/posts`); setChange(`/wall/${user.username}/posts`) }}
                     src={'/icon.png'}
                     sx={{ width: '5rem', height: '5rem', margin: 'auto' }}
                 />
@@ -92,4 +94,10 @@ const LongNav = ({ setChange, toggleMode, setStart, setSearchInput }) => {
         </AppBar>
     );
 }
-export default LongNav
+const stateProps = (state) => {
+    return {
+        user: state.auth.user,
+    };
+};
+
+export default connect(stateProps)(LongNav);

@@ -112,12 +112,12 @@ const ChatComponent = ({ user, socket, info }) => {
                 <Grid container justifyContent={'flex-end'}>
                     <Grid item>
                         <IconButton onClick={getUsers}>
-                            <Groups2 />
+                            <Groups2 style={{ color: '#1E90FF' }} />
                         </IconButton>
                     </Grid>
                     <Grid item>
                         <IconButton onClick={getInfo}>
-                            <Info />
+                            <Info style={{ color: '#9370DB' }} />
                         </IconButton>
                     </Grid>
                 </Grid>
