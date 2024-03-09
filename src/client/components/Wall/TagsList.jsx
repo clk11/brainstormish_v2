@@ -48,15 +48,12 @@ const Tags = ({ setTags, tags }) => {
 						return newArr;
 					});
 					setTag('');
-					document.getElementById('input').value = '';
 				} else
 					alert("Illegal characters detected! Only letters (upper and lower) and spaces are allowed.");
-			} else {
+			} else
 				alert('Tag already in the list !');
-			}
-		} else {
+		} else
 			alert('You need to add a tag first !');
-		}
 	};
 
 	const removeItem = (item) => {
@@ -76,6 +73,7 @@ const Tags = ({ setTags, tags }) => {
 					temp = [];
 					return temp;
 				});
+				setTag('');
 			}}
 		>
 			CLEAR TAGS
@@ -92,6 +90,7 @@ const Tags = ({ setTags, tags }) => {
 		<Grid container spacing={2} sx={{ marginBottom: '1.5625rem' }}>
 			<Grid item>
 				<TextField
+					value={tag}
 					onChange={(e) => setTag(e.target.value)}
 					size='small'
 					id='input'

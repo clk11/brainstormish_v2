@@ -8,7 +8,7 @@ const context = new Pool({
 	password: '7139852465',
 	host: 'localhost',
 	port: 5432,
-	database: process.env.PRODUCTION === 'no' ? 'dbmain' : 'brain',
+	database: 'brain',
 });
 
 export default {
