@@ -12,6 +12,7 @@ const NewPost = ({ addPost, errors, user, getUser }) => {
     const [open, setOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [title, setTitle] = useState('');
+    const [buttonDisabled, setButtonDisabled] = useState(false);
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,6 +29,7 @@ const NewPost = ({ addPost, errors, user, getUser }) => {
     const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     const handleCreatePost = async () => {
+        setButtonDisabled(true);
         const res = await addPost({ title, description, tags });
         if (res === 1) {
             setAlertMessage('Post created successfully!');
@@ -36,6 +38,7 @@ const NewPost = ({ addPost, errors, user, getUser }) => {
                 navigate(`/wall/${user.username}/posts`);
             }, 500);
         } else {
+            setButtonDisabled(false);
             setOpen(true);
         }
     };
@@ -82,7 +85,7 @@ const NewPost = ({ addPost, errors, user, getUser }) => {
                             maxRows={7}
                         />
                         <TagsList tags={tags} setTags={setTags} />
-                        <Button variant="contained" onClick={handleCreatePost}>
+                        <Button disabled={buttonDisabled} variant="contained" onClick={handleCreatePost}>
                             Create
                         </Button>
                     </Box>

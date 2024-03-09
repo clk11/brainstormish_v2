@@ -135,6 +135,7 @@ const ChatComponent = ({ user, socket, info }) => {
                         <TextField
                             fullWidth
                             id='message'
+                            multiline
                             variant="outlined"
                             onKeyDown={(e) => { if (e.key === 'Enter') onSend() }}
                             placeholder="Type a message"
