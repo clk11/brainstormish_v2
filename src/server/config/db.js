@@ -8,7 +8,7 @@ const context = new Pool({
 	password: '7139852465',
 	host: 'localhost',
 	port: 5432,
-	database: 'brain',
+	database: 'db',
 });
 
 export default {
