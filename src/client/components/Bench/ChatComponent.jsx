@@ -137,7 +137,7 @@ const ChatComponent = ({ user, socket, info }) => {
                             id='message'
                             multiline
                             variant="outlined"
-                            onKeyDown={(e) => { if (e.key === 'Enter') {e.preventDefault();onSend()} }}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); onSend() } }}
                             placeholder="Type a message"
                         />
                     </Grid>
